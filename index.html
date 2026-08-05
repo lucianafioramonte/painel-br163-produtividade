@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Produção — BR-163 Duplicação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  :root{
+    --asphalt:#2B2E33;
+    --asphalt-2:#3A3E45;
+    --brand:#2F5D8A;
+    --brand-light:#E7EEF4;
+    --amber:#F2B33D;
+    --ok:#1E8E3E;
+    --ok-bg:#E8F5EA;
+    --warn:#D98C00;
+    --warn-bg:#FDF1DD;
+    --crit:#C0392B;
+    --crit-bg:#FBEAE8;
+    --bg:#F4F5F3;
+    --card:#FFFFFF;
+    --border:#E1E1DC;
+    --text:#22252A;
+    --text-2:#5B5F66;
+    --text-3:#8A8E94;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,sans-serif; padding-bottom:3rem;
+  }
+  h1,h2,h3{font-family:'Oswald',sans-serif; font-weight:600; letter-spacing:.02em; margin:0;}
+  .mono{font-family:'Roboto Mono',monospace;}
+  header{
+    background:var(--asphalt); color:#fff; padding:1.5rem 1.25rem 1.75rem;
+    position:relative;
+  }
+  header .top{display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap;}
+  header h1{font-size:20px; text-transform:uppercase;}
+  header .sub{color:#B9BEC6; font-size:13px; margin-top:4px;}
+  header .datebox{
+    background:var(--asphalt-2); border-radius:8px; padding:.6rem .9rem; text-align:right;
+  }
+  header .datebox .d1{font-size:12px; color:#B9BEC6;}
+  header .datebox .d2{font-size:16px; font-weight:600; font-family:'Roboto Mono',monospace;}
+  .roadline{
+    height:6px; margin-top:1.25rem;
+    background-image:repeating-linear-gradient(90deg, var(--amber) 0 26px, transparent 26px 46px);
+    border-radius:3px; opacity:.9;
+  }
+  main{max-width:1040px; margin:0 auto; padding:0 1.25rem;}
+  section{margin-top:1.75rem;}
+  .section-title{font-size:14px; text-transform:uppercase; color:var(--text-2); letter-spacing:.06em; margin-bottom:.75rem; font-weight:600;}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:10px;}
+  .entry-form{
+    display:flex; gap:.6rem; flex-wrap:wrap; align-items:flex-end; padding:1rem 1.1rem;
+  }
+  .field{display:flex; flex-direction:column; gap:4px;}
+  .field label{font-size:12px; color:var(--text-2);}
+  .field input, .field select{
+    border:1px solid var(--border); border-radius:6px; padding:8px 10px; font-size:14px;
+    font-family:'Inter',sans-serif; background:#fff; color:var(--text); min-width:150px;
+  }
+  .field.grow{flex:1; min-width:200px;}
+  button{
+    background:var(--brand); color:#fff; border:none; border-radius:6px;
+    padding:9px 18px; font-size:14px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+  button:hover{background:#274C71;}
+  button.ghost{
+    background:transparent; color:var(--text-2); border:1px solid var(--border); padding:6px 10px; font-size:12px;
+  }
+  button.ghost:hover{background:#F2F2F0;}
+
+  .cards-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px;
+  }
+  .pcard{padding:1rem 1.1rem;}
+  .pcard .pname{font-size:14px; font-weight:600;}
+  .pcard .punit{font-size:12px; color:var(--text-3); margin-left:4px; font-weight:400;}
+  .pcard .prow{display:flex; justify-content:space-between; align-items:baseline; margin-top:2px;}
+  .pcard .pval{font-family:'Roboto Mono',monospace; font-size:22px; font-weight:500;}
+  .pcard .pgoal{font-size:12px; color:var(--text-3); font-family:'Roboto Mono',monospace;}
+  .bar-track{
+    height:10px; border-radius:5px; background:#ECECE8; margin-top:10px; position:relative; overflow:hidden;
+  }
+  .bar-fill{height:100%; border-radius:5px;}
+  .bar-expected{
+    position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--asphalt);
+  }
+  .pmeta{display:flex; justify-content:space-between; margin-top:8px; font-size:12px; color:var(--text-2);}
+  .badge{
+    display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600;
+    padding:3px 9px; border-radius:20px; text-transform:uppercase; letter-spacing:.03em;
+  }
+  .badge.ok{background:var(--ok-bg); color:var(--ok);}
+  .badge.warn{background:var(--warn-bg); color:var(--warn);}
+  .badge.crit{background:var(--crit-bg); color:var(--crit);}
+  .badge.none{background:#EEEEEA; color:var(--text-3);}
+
+  .today-strip{display:flex; gap:10px; flex-wrap:wrap;}
+  .tchip{
+    background:var(--brand-light); border-radius:8px; padding:.6rem .9rem; min-width:150px;
+  }
+  .tchip .tn{font-size:12px; color:var(--brand); font-weight:600;}
+  .tchip .tv{font-family:'Roboto Mono',monospace; font-size:18px; margin-top:2px;}
+  .tchip.empty{background:#F0F0EC; color:var(--text-3);}
+  .tchip.empty .tn{color:var(--text-3);}
+
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--border);}
+  th{color:var(--text-2); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.03em;}
+  td.num{font-family:'Roboto Mono',monospace; text-align:right;}
+  th.num{text-align:right;}
+
+  .log-cat{padding:0 0 1rem;}
+  .log-cat summary{
+    cursor:pointer; padding:.75rem 1.1rem; font-size:14px; font-weight:600; list-style:none;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .log-cat summary::-webkit-details-marker{display:none;}
+  .log-cat summary .chev{color:var(--text-3); font-size:12px;}
+  .log-cat table{padding:0 1.1rem;}
+  .log-cat .inner{padding:0 1.1rem 1rem;}
+  .delbtn{
+    background:none; border:none; color:var(--crit); cursor:pointer; font-size:12px; padding:2px 6px;
+  }
+  #chartCanvasBox{position:relative; width:100%; height:420px;}
+  .chart-toolbar{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+  .activity-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(440px,1fr)); gap:14px;}
+  .achart-card{padding:1rem 1.1rem;}
+  .achart-head{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:6px;}
+  .achart-head .an{font-size:14px; font-weight:600;}
+  .achart-head .ar{font-size:12px; color:var(--text-3);}
+  .achart-canvasbox{position:relative; width:100%; height:230px; margin-top:6px;}
+  .legend-row{display:flex; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--text-2); margin-bottom:10px;}
+  .legend-row span{display:flex; align-items:center; gap:5px;}
+  .dot{width:9px; height:9px; border-radius:2px; display:inline-block;}
+  .note{font-size:12px; color:var(--text-3); margin-top:.6rem; line-height:1.5;}
+  footer{max-width:1040px; margin:2rem auto 0; padding:0 1.25rem; font-size:12px; color:var(--text-3); line-height:1.6;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top">
+    <div>
+      <h1>Painel de produção — Duplicação BR-163</h1>
+      <div class="sub">Lucas do Rio Verde / Sorriso — MT · Metas mensais de agosto/2026</div>
+    </div>
+    <div class="datebox">
+      <div class="d1">Hoje</div>
+      <div class="d2" id="todayLabel">—</div>
+    </div>
+  </div>
+  <div class="roadline"></div>
+</header>
+
+<main>
+
+  <section>
+    <div class="card" id="syncBanner" style="padding:.9rem 1.1rem; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:13px; font-weight:600;" id="syncStatus">Sincronizando com o GitHub…</div>
+        <div style="font-size:12px; color:var(--text-3);" id="syncDetail">lucianafioramonte/painel-br163-produtividade</div>
+      </div>
+      <button class="ghost" onclick="loadAll().then(renderAll)">Recarregar dados</button>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; text-transform:none; letter-spacing:0;">
+      <span style="text-transform:uppercase; letter-spacing:.06em;">Apontado em</span>
+      <input type="date" id="stripDate" onchange="renderTodayStrip()">
+    </div>
+    <div class="today-strip" id="todayStrip"></div>
+  </section>
+
+  <section>
+    <div class="section-title">Progresso da meta mensal</div>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </section>
+
+  <section>
+    <div class="section-title">Ritmo por atividade</div>
+    <div class="note" style="margin:0 0 .9rem;">
+      Linha cinza tracejada = ritmo ideal até o fim do mês. Linha colorida sólida = realizado (para no último dia apontado).
+      Linhas pontilhadas coloridas = ritmo necessário para bater a meta, recalculado em cada sábado de checagem (08, 15, 22 e 29/08) a partir do que foi realizado até aquele sábado — cada uma só aparece depois que o sábado correspondente já passou.
+      As 4 linhas de meta parcial (1ª a 4ª, uma por sábado) ficam sempre visíveis; a comparação "falta X p/ meta" usa a meta ativa no momento — 1ª meta até 08/08, depois passa a usar a 2ª automaticamente, e assim por diante.
+    </div>
+    <div id="activityCharts"></div>
+  </section>
+
+  <section>
+    <div class="section-title">Histórico de apontamentos</div>
+    <div id="logsWrap"></div>
+  </section>
+
+</main>
+
+<footer>
+  Os dados deste painel vêm do repositório <a href="https://github.com/lucianafioramonte/painel-br163-produtividade" target="_blank" style="color:var(--brand);">lucianafioramonte/painel-br163-produtividade</a> no GitHub e são atualizados pelo Claude a cada dia, a partir das fotos dos quadros. Se o GitHub estiver inacessível no momento, o painel usa a última cópia salva neste navegador.
+</footer>
+
+<script>
+const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/lucianafioramonte/painel-br163-produtividade/main/dados.json';
+
+let CATS = [
+  { key:'cbuq', name:'CBUQ', resp:'Valmir', unit:'ton', goal:40000, color:'#2a78d6' },
+  { key:'pavimento', name:'Estrutura do pavimento', resp:'Neivaldo', unit:'m', goal:36400, color:'#eb6834' },
+  { key:'terra_tronco', name:'Terraplanagem compactação — Tronco', resp:'Frentes 02 a 06', unit:'m³', goal:127756, color:'#1baf7a' },
+  { key:'terra_primavera', name:'Terraplanagem compactação — Primavera (713-714)', resp:'Dedé', unit:'m³', goal:64000, color:'#eda100' },
+  { key:'bueiro_josias', name:'Lançamento de bueiros — Josias', resp:'732-745', unit:'linhas', goal:32, color:'#e87ba4' },
+  { key:'bueiro_daniel', name:'Lançamento de bueiros — Daniel', resp:'713-714 Marg. Norte', unit:'m', goal:850, color:'#4a3aa7' }
+];
+
+const MONTH_YEAR = {year:2026, month:8};
+
+function fmt(n){
+  if(n===null||n===undefined||isNaN(n)) return '—';
+  return Number(n).toLocaleString('pt-BR', {maximumFractionDigits:2});
+}
+function pct(n){ return Number(n).toLocaleString('pt-BR', {maximumFractionDigits:1}) + '%'; }
+function isoDate(d){ return d.toISOString().slice(0,10); }
+function todayISO(){ return isoDate(new Date()); }
+
+function workingDaysOfMonth(year, month){
+  const days=[];
+  const d = new Date(Date.UTC(year, month-1, 1));
+  while(d.getUTCMonth() === month-1){
+    if(d.getUTCDay() !== 0) days.push(isoDate(d));
+    d.setUTCDate(d.getUTCDate()+1);
+  }
+  return days;
+}
+const WORK_DAYS = workingDaysOfMonth(MONTH_YEAR.year, MONTH_YEAR.month);
+const TOTAL_WORK_DAYS = WORK_DAYS.length;
+
+function workingDayIndex(dateStr){
+  const idx = WORK_DAYS.indexOf(dateStr);
+  return idx === -1 ? null : idx+1;
+}
+function saturdaysUpTo(dateStr){
+  return WORK_DAYS.filter(d => {
+    const dt = new Date(d+'T00:00:00Z');
+    return dt.getUTCDay()===6 && d <= dateStr;
+  });
+}
+const ALL_SATURDAYS = WORK_DAYS.filter(d => new Date(d+'T00:00:00Z').getUTCDay()===6);
+// Sabados de checagem: todos menos o primeiro (que cai antes do inicio do acompanhamento semanal)
+const CHECK_SATS = ALL_SATURDAYS.slice(1);
+
+let ENTRIES = {};
+let DATA_SOURCE = 'loading';
+
+async function loadAll(){
+  const statusEl = document.getElementById('syncStatus');
+  const detailEl = document.getElementById('syncDetail');
+  if(statusEl){ statusEl.textContent = 'Sincronizando com o GitHub…'; }
+
+  let ghData = null;
+  try{
+    const resp = await fetch(GITHUB_RAW_URL + '?t=' + Date.now(), {cache:'no-store'});
+    if(resp.ok) ghData = await resp.json();
+  }catch(e){ /* offline ou bloqueado - segue pro fallback local */ }
+
+  if(ghData && ghData.entries){
+    if(Array.isArray(ghData.categories) && ghData.categories.length){
+      CATS = ghData.categories;
+    }
+    ENTRIES = {};
+    CATS.forEach(c => { ENTRIES[c.key] = ghData.entries[c.key] ? {...ghData.entries[c.key]} : {}; });
+    for(const c of CATS){ await saveCat(c.key); } // cacheia local pra funcionar offline depois
+    DATA_SOURCE = 'github';
+    if(statusEl){
+      statusEl.textContent = '✓ Sincronizado com o GitHub';
+      const upd = ghData.updated_at ? new Date(ghData.updated_at).toLocaleString('pt-BR') : null;
+      detailEl.textContent = 'lucianafioramonte/painel-br163-produtividade' + (upd ? ' · atualizado em ' + upd : '');
+    }
+  } else {
+    for(const c of CATS){
+      try{
+        const r = await window.storage.get('entries:'+c.key, false);
+        ENTRIES[c.key] = r && r.value ? JSON.parse(r.value) : {};
+      }catch(e){ ENTRIES[c.key] = {}; }
+    }
+    DATA_SOURCE = 'local';
+    if(statusEl){
+      statusEl.textContent = '⚠ Não consegui buscar o GitHub agora';
+      detailEl.textContent = 'Mostrando a última cópia salva neste navegador.';
+    }
+  }
+}
+
+async function saveCat(key){
+  await window.storage.set('entries:'+key, JSON.stringify(ENTRIES[key]), false);
+}
+
+function monthEntries(key){
+  const all = ENTRIES[key] || {};
+  const out = {};
+  Object.keys(all).forEach(d => {
+    if(d.slice(0,7) === `${MONTH_YEAR.year}-${String(MONTH_YEAR.month).padStart(2,'0')}`) out[d]=all[d];
+  });
+  return out;
+}
+function accumulated(key, uptoDate){
+  const m = monthEntries(key);
+  let sum = 0;
+  Object.keys(m).forEach(d => { if(!uptoDate || d <= uptoDate) sum += Number(m[d]); });
+  return sum;
+}
+
+function statusFor(actualPct, expectedPct){
+  if(expectedPct <= 0) return 'none';
+  const ratio = actualPct / expectedPct;
+  if(ratio >= 0.9) return 'ok';
+  if(ratio >= 0.75) return 'warn';
+  return 'crit';
+}
+function statusLabel(s){
+  return {ok:'No prazo', warn:'Atenção', crit:'Crítico', none:'Sem dados'}[s];
+}
+
+function populateForm(){
+  document.getElementById('stripDate').value = todayISO();
+  document.getElementById('todayLabel').textContent = new Date().toLocaleDateString('pt-BR', {weekday:'short', day:'2-digit', month:'2-digit', year:'numeric'});
+}
+
+function renderTodayStrip(){
+  const dateInput = document.getElementById('stripDate');
+  const t = dateInput.value || todayISO();
+  const wrap = document.getElementById('todayStrip');
+  wrap.innerHTML = CATS.map(c => {
+    const v = (ENTRIES[c.key]||{})[t];
+    if(v===undefined) return `<div class="tchip empty"><div class="tn">${c.name}</div><div class="tv">sem apontamento</div></div>`;
+    return `<div class="tchip"><div class="tn">${c.name}</div><div class="tv">${fmt(v)} ${c.unit}</div></div>`;
+  }).join('');
+}
+
+function renderCards(){
+  const t = todayISO();
+  const idx = workingDayIndex(t) || TOTAL_WORK_DAYS;
+  const grid = document.getElementById('cardsGrid');
+  grid.innerHTML = CATS.map(c => {
+    const acc = accumulated(c.key);
+    const actualPct = c.goal ? (acc/c.goal*100) : 0;
+    const expectedPct = (idx/TOTAL_WORK_DAYS)*100;
+    const st = statusFor(actualPct, expectedPct);
+    const fillW = Math.min(actualPct,100);
+    const expW = Math.min(expectedPct,100);
+    const fillColor = st==='ok' ? 'var(--ok)' : st==='warn' ? 'var(--warn)' : st==='crit' ? 'var(--crit)' : 'var(--text-3)';
+    return `<div class="card pcard">
+      <div class="prow"><span class="pname">${c.name}<span class="punit">${c.resp}</span></span></div>
+      <div class="prow" style="margin-top:6px;">
+        <span class="pval">${fmt(acc)} <span class="punit">${c.unit}</span></span>
+        <span class="pgoal">meta ${fmt(c.goal)} ${c.unit}</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${fillW}%; background:${fillColor};"></div>
+        <div class="bar-expected" style="left:${expW}%;"></div>
+      </div>
+      <div class="pmeta">
+        <span>Real ${pct(actualPct)} · esperado hoje ${pct(expectedPct)}</span>
+        <span class="badge ${st}">${statusLabel(st)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let chartInstances = {};
+const SAT_COLORS = ['#8a5ac9','#c96a5a','#3fa796','#c9a23f'];
+
+function requiredLineForSaturday(c, satDate){
+  const t = todayISO();
+  if(satDate > t) return null; // checkpoint ainda nao alcancado
+  const idxS = workingDayIndex(satDate);
+  const valAtS = accumulated(c.key, satDate);
+  const idxEnd = TOTAL_WORK_DAYS;
+  return WORK_DAYS.map((d,i)=>{
+    const idx = i+1;
+    if(idx < idxS) return null;
+    if(idx === idxS) return +valAtS.toFixed(1);
+    if(idxEnd === idxS) return +valAtS.toFixed(1);
+    const frac = (idx - idxS) / (idxEnd - idxS);
+    return +(valAtS + (c.goal - valAtS) * frac).toFixed(1);
+  });
+}
+
+function buildActivityChart(c){
+  const labels = WORK_DAYS.map((d,i)=>i+1);
+  const metaLine = WORK_DAYS.map((d,i)=> +(c.goal*(i+1)/TOTAL_WORK_DAYS).toFixed(1));
+
+  const m = monthEntries(c.key);
+  const entryDates = Object.keys(m);
+  const lastEntryDate = entryDates.length ? entryDates.sort().slice(-1)[0] : null;
+  const realLine = WORK_DAYS.map(d => {
+    if(!lastEntryDate || d > lastEntryDate) return null;
+    return +accumulated(c.key, d).toFixed(1);
+  });
+
+  const datasets = [
+    { label:'Meta', data: metaLine, borderColor:'#c3c2b7', borderDash:[5,4], borderWidth:1.5, pointRadius:0 },
+    { label:'Realizado', data: realLine, borderColor:c.color, backgroundColor:c.color, borderWidth:2.5, pointRadius:0, tension:.15, spanGaps:false }
+  ];
+
+  CHECK_SATS.forEach((sat, i) => {
+    const line = requiredLineForSaturday(c, sat);
+    if(line){
+      datasets.push({
+        label:`Ritmo necessário a partir de ${sat.split('-').reverse().join('/')}`,
+        data: line,
+        borderColor: SAT_COLORS[i % SAT_COLORS.length],
+        borderWidth:1.5,
+        borderDash:[2,3],
+        pointRadius:0,
+        spanGaps:false
+      });
+    }
+  });
+  return { labels, datasets };
+}
+
+function renderActivityCharts(){
+  const wrap = document.getElementById('activityCharts');
+  if(!wrap.dataset.built){
+    wrap.className = 'activity-grid';
+    wrap.innerHTML = CATS.map(c => `
+      <div class="card achart-card">
+        <div class="achart-head">
+          <div>
+            <div class="an">${c.name}</div>
+            <div class="ar">${c.resp} · meta ${fmt(c.goal)} ${c.unit}</div>
+          </div>
+        </div>
+        <div class="legend-row" id="legend_${c.key}"></div>
+        <div class="achart-canvasbox"><canvas id="pace_${c.key}"></canvas></div>
+      </div>
+    `).join('');
+    wrap.dataset.built = '1';
+  }
+
+  CATS.forEach(c => {
+    const { labels, datasets } = buildActivityChart(c);
+    const legend = document.getElementById('legend_'+c.key);
+
+    const accToday = accumulated(c.key);
+
+    // valor da meta parcial em cada sabado de checagem (ponto do ritmo ideal naquele dia)
+    const subMetas = CHECK_SATS.map(sat => ({
+      sat, value: c.goal * (workingDayIndex(sat)/TOTAL_WORK_DAYS)
+    }));
+    // meta ativa: a primeira cujo sabado ainda nao passou; se todas passaram, usa a ultima
+    const t = todayISO();
+    let activeIdx = subMetas.findIndex(sm => t <= sm.sat);
+    if(activeIdx === -1) activeIdx = subMetas.length - 1;
+    const activeMeta = subMetas[activeIdx];
+    const remaining = activeMeta.value - accToday;
+
+    legend.innerHTML = datasets.map(ds => `<span><span class="dot" style="background:${ds.borderColor}"></span>${ds.label}</span>`).join('') +
+      subMetas.map((sm,i) => `<span><span class="dot" style="background:${SAT_COLORS[i % SAT_COLORS.length]}"></span>${i+1}ª meta (${sm.sat.split('-').reverse().join('/')}): ${fmt(sm.value)} ${c.unit}${i===activeIdx?' — em uso':''}</span>`).join('') +
+      `<span><span class="dot" style="background:#C0392B"></span>Realizado hoje / falta p/ meta ativa</span>`;
+
+    const maxVal = Math.max(c.goal, ...datasets.flatMap(ds => ds.data.filter(v=>v!==null)));
+    const midX = Math.min(Math.max(Math.round(TOTAL_WORK_DAYS*0.6), 2), TOTAL_WORK_DAYS-1);
+
+    const subMetaAnnotations = {};
+    subMetas.forEach((sm,i) => {
+      subMetaAnnotations['sub'+i] = {
+        type:'line', yMin:sm.value, yMax:sm.value,
+        borderColor: i===activeIdx ? '#C0392B' : SAT_COLORS[i % SAT_COLORS.length],
+        borderWidth: i===activeIdx ? 2 : 1,
+        borderDash: i===activeIdx ? [] : [3,3],
+        label:{ display:true, content:(i+1)+'ª meta ('+sm.sat.split('-').reverse().join('/')+'): '+fmt(sm.value)+' '+c.unit,
+          position:'start', backgroundColor: i===activeIdx ? '#C0392B' : SAT_COLORS[i % SAT_COLORS.length],
+          color:'#fff', font:{size:9}, padding:3 }
+      };
+    });
+
+    const ctx = document.getElementById('pace_'+c.key);
+    if(chartInstances[c.key]) chartInstances[c.key].destroy();
+    chartInstances[c.key] = new Chart(ctx, {
+      type:'line',
+      data:{ labels, datasets },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        layout:{ padding:{ top:22 } },
+        plugins:{
+          legend:{ display:false },
+          tooltip:{ callbacks:{ label:(ctx)=> ctx.dataset.label+': '+fmt(ctx.parsed.y)+' '+c.unit } },
+          annotation:{
+            annotations:{
+              ...subMetaAnnotations,
+              realLine:{
+                type:'line', yMin:accToday, yMax:accToday,
+                borderColor:'#C0392B', borderWidth:1.5, borderDash:[4,4],
+                label:{ display:true, content:'Realizado hoje: '+fmt(accToday)+' '+c.unit, position:'end',
+                  backgroundColor:'#C0392B', color:'#fff', font:{size:10}, padding:4 }
+              },
+              gapLabel:{
+                type:'label', xValue: midX, yValue:(activeMeta.value+accToday)/2,
+                content: remaining > 0
+                  ? ['Falta '+fmt(remaining)+' '+c.unit+' p/ '+(activeIdx+1)+'ª meta ('+activeMeta.sat.split('-').reverse().join('/')+')']
+                  : [(activeIdx+1)+'ª meta batida ✓'],
+                color:'#C0392B', font:{size:12, weight:'600'}, backgroundColor:'rgba(255,255,255,.85)', padding:4
+              }
+            }
+          }
+        },
+        scales:{
+          x:{ title:{display:true, text:'Dia útil', color:'#898781'}, ticks:{color:'#898781'}, grid:{color:'#e1e0d9'} },
+          y:{ min:0, max: maxVal*1.08, ticks:{color:'#898781', callback:v=>fmt(v)}, grid:{color:'#e1e0d9'} }
+        }
+      }
+    });
+  });
+}
+
+function renderLogs(){
+  const wrap = document.getElementById('logsWrap');
+  wrap.innerHTML = CATS.map(c => {
+    const m = monthEntries(c.key);
+    const dates = Object.keys(m).sort();
+    const rows = dates.map(d => `<tr>
+        <td>${d.split('-').reverse().join('/')}</td>
+        <td class="num">${fmt(m[d])} ${c.unit}</td>
+      </tr>`).join('');
+    return `<details class="log-cat card" style="margin-bottom:10px;">
+      <summary>${c.name} <span class="chev">${dates.length} apontamento(s) ▾</span></summary>
+      <div class="inner">
+        <table>
+          <thead><tr><th>Data</th><th class="num">Produção</th></tr></thead>
+          <tbody>${rows || '<tr><td colspan="2" style="color:var(--text-3);">Sem apontamentos.</td></tr>'}</tbody>
+        </table>
+      </div>
+    </details>`;
+  }).join('');
+}
+
+function renderAll(){
+  renderTodayStrip();
+  renderCards();
+  renderActivityCharts();
+  renderLogs();
+}
+
+(async function init(){
+  populateForm();
+  await loadAll();
+  renderAll();
+
+  // atualiza sozinho a cada 5 minutos
+  setInterval(async () => { await loadAll(); renderAll(); }, 5*60*1000);
+
+  // e tambem quando a aba volta a ficar visivel (ex: usuario deixou aberta e voltou depois)
+  document.addEventListener('visibilitychange', async () => {
+    if(document.visibilityState === 'visible'){ await loadAll(); renderAll(); }
+  });
+})();
+</script>
+</body>
+</html>
