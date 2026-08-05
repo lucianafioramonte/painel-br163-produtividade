@@ -428,6 +428,17 @@ function buildActivityChart(c){
 
 function renderActivityCharts(){
   const wrap = document.getElementById('activityCharts');
+
+  if(typeof Chart === 'undefined'){
+    wrap.innerHTML = `<div class="card" style="padding:1rem 1.1rem; color:var(--crit);">
+      Não consegui carregar a biblioteca de gráficos (Chart.js). Isso costuma ser falha de rede ou bloqueio de CDN —
+      tenta recarregar a página. Os números acima (cards de progresso) continuam válidos mesmo sem os gráficos.
+      <div style="margin-top:8px;"><button class="ghost" onclick="location.reload()">Recarregar página</button></div>
+    </div>`;
+    wrap.dataset.built = '';
+    return;
+  }
+
   if(!wrap.dataset.built){
     wrap.className = 'activity-grid';
     wrap.innerHTML = CATS.map(c => `
@@ -446,6 +457,7 @@ function renderActivityCharts(){
   }
 
   CATS.forEach(c => {
+   try{
     const { labels, datasets } = buildActivityChart(c);
     const legend = document.getElementById('legend_'+c.key);
 
@@ -518,6 +530,11 @@ function renderActivityCharts(){
         }
       }
     });
+   }catch(err){
+     console.error('Falha ao montar o grafico de', c.key, err);
+     const box = document.querySelector('#pace_'+c.key)?.parentElement;
+     if(box) box.innerHTML = '<div style="font-size:12px; color:var(--crit); padding:8px;">Não consegui montar este gráfico. Os outros continuam normais.</div>';
+   }
   });
 }
 
@@ -543,10 +560,11 @@ function renderLogs(){
 }
 
 function renderAll(){
-  renderTodayStrip();
-  renderCards();
-  renderActivityCharts();
-  renderLogs();
+  const steps = [renderTodayStrip, renderCards, renderActivityCharts, renderLogs];
+  for(const step of steps){
+    try{ step(); }
+    catch(err){ console.error('Falha em', step.name, err); }
+  }
 }
 
 (async function init(){
