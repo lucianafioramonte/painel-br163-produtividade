@@ -1,0 +1,82 @@
+{
+  "updated_at": "2026-08-05T22:24:33.144349Z",
+  "month": {
+    "year": 2026,
+    "month": 8
+  },
+  "categories": [
+    {
+      "key": "cbuq",
+      "name": "CBUQ",
+      "resp": "Valmir",
+      "unit": "ton",
+      "goal": 40000,
+      "color": "#2a78d6"
+    },
+    {
+      "key": "pavimento",
+      "name": "Estrutura do pavimento",
+      "resp": "Neivaldo",
+      "unit": "m",
+      "goal": 36400,
+      "color": "#eb6834"
+    },
+    {
+      "key": "terra_tronco",
+      "name": "Terraplanagem compactação — Tronco",
+      "resp": "Frentes 02 a 06",
+      "unit": "m³",
+      "goal": 127756,
+      "color": "#1baf7a"
+    },
+    {
+      "key": "terra_primavera",
+      "name": "Terraplanagem compactação — Primavera (713-714)",
+      "resp": "Dedé",
+      "unit": "m³",
+      "goal": 64000,
+      "color": "#eda100"
+    },
+    {
+      "key": "bueiro_josias",
+      "name": "Lançamento de bueiros — Josias",
+      "resp": "732-745",
+      "unit": "linhas",
+      "goal": 32,
+      "color": "#e87ba4"
+    },
+    {
+      "key": "bueiro_daniel",
+      "name": "Lançamento de bueiros — Daniel",
+      "resp": "713-714 Marg. Norte",
+      "unit": "m",
+      "goal": 850,
+      "color": "#4a3aa7"
+    }
+  ],
+  "entries": {
+    "cbuq": {
+      "2026-08-03": 1433,
+      "2026-08-04": 1430
+    },
+    "pavimento": {
+      "2026-08-03": 1500,
+      "2026-08-04": 1830
+    },
+    "terra_tronco": {
+      "2026-08-03": 4650,
+      "2026-08-04": 5500
+    },
+    "terra_primavera": {
+      "2026-08-03": 1622,
+      "2026-08-04": 1000
+    },
+    "bueiro_josias": {
+      "2026-08-03": 0
+    },
+    "bueiro_daniel": {
+      "2026-08-03": 4,
+      "2026-08-04": 42
+    }
+  }
+}
