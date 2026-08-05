@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T22:33:54.235899Z",
+  "updated_at": "2026-08-05T22:38:00.133866Z",
   "month": {
     "year": 2026,
     "month": 8
@@ -55,11 +55,19 @@
     }
   ],
   "entries": {
-    "cbuq": {},
-    "pavimento": {},
-    "terra_tronco": {},
+    "cbuq": {
+      "2026-08-01": 1192
+    },
+    "pavimento": {
+      "2026-08-01": 520
+    },
+    "terra_tronco": {
+      "2026-08-01": 3177
+    },
     "terra_primavera": {},
-    "bueiro_josias": {},
+    "bueiro_josias": {
+      "2026-08-01": 1
+    },
     "bueiro_daniel": {}
   }
 }
