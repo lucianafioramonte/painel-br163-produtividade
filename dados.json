@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T01:13:32.649239Z",
+  "updated_at": "2026-08-06T11:59:07.386277Z",
   "month": {
     "year": 2026,
     "month": 8
@@ -50,8 +50,48 @@
       "name": "Lançamento de bueiros — Daniel",
       "resp": "713-714 Marg. Norte",
       "unit": "m",
-      "goal": 850,
-      "color": "#4a3aa7"
+      "goal": 1416,
+      "color": "#9B7EF0"
+    },
+    {
+      "key": "disp_caixas",
+      "name": "Dispositivo Primavera — Caixas",
+      "resp": "Daniel & Simplício",
+      "unit": "caixas",
+      "goal": 46,
+      "color": "#22C3B0"
+    },
+    {
+      "key": "disp_alas",
+      "name": "Dispositivo Primavera — Alas",
+      "resp": "Daniel & Simplício",
+      "unit": "alas",
+      "goal": 5,
+      "color": "#D6417E"
+    },
+    {
+      "key": "disp_dissipadores",
+      "name": "Dispositivo Primavera — Dissipadores",
+      "resp": "Daniel & Simplício",
+      "unit": "dissipadores",
+      "goal": 2,
+      "color": "#A3A32B"
+    },
+    {
+      "key": "disp_enrocamento",
+      "name": "Dispositivo Primavera — Enrocamento",
+      "resp": "Daniel & Simplício",
+      "unit": "enrocamento",
+      "goal": 1,
+      "color": "#B5651D"
+    },
+    {
+      "key": "galeria_simplicio",
+      "name": "Galeria",
+      "resp": "Simplício",
+      "unit": "m",
+      "goal": 98,
+      "color": "#4FB3E8"
     }
   ],
   "entries": {
@@ -86,6 +126,11 @@
     "bueiro_daniel": {
       "2026-08-03": 0,
       "2026-08-04": 42
-    }
+    },
+    "disp_caixas": {},
+    "disp_alas": {},
+    "disp_dissipadores": {},
+    "disp_enrocamento": {},
+    "galeria_simplicio": {}
   }
 }
