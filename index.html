@@ -426,12 +426,16 @@ function requiredLineForSaturday(c, satDate){
 }
 
 function marcosFor(c){
-  // 1o a 3o Marco = pontos intermediarios (sabados de checagem, exceto o ultimo); o ultimo sabado = "Meta"
-  return CHECK_SATS.map((sat, i) => ({
-    sat,
+  // 1o a 3o Marco = pontos intermediarios (3 primeiros sabados de checagem)
+  // Meta = valor real da meta mensal, no ultimo dia util do mes (nao prorateado)
+  const lastWorkDay = WORK_DAYS[WORK_DAYS.length-1];
+  const marcos = CHECK_SATS.slice(0, CHECK_SATS.length-1).map((sat, i) => ({
+    date: sat,
     value: c.goal * (workingDayIndex(sat)/TOTAL_WORK_DAYS),
-    label: i === CHECK_SATS.length-1 ? 'Meta' : (i+1)+'° Marco'
+    label: (i+1)+'° Marco'
   }));
+  marcos.push({ date: lastWorkDay, value: c.goal, label: 'Meta' });
+  return marcos;
 }
 
 function buildActivityChart(c){
@@ -494,8 +498,6 @@ function renderActivityCharts(){
         </div>
         <div class="legend-row" id="legend_${c.key}"></div>
         <div class="achart-canvasbox"><canvas id="pace_${c.key}"></canvas></div>
-        <div class="marco-row" id="marcorow_${c.key}"></div>
-        <div class="gap-line" id="gapline_${c.key}"></div>
       </div>
     `).join('');
     wrap.dataset.built = '1';
@@ -508,34 +510,33 @@ function renderActivityCharts(){
     const accToday = accumulated(c.key);
     const marcos = marcosFor(c);
     const t = todayISO();
-    let activeIdx = marcos.findIndex(mk => t <= mk.sat);
+    let activeIdx = marcos.findIndex(mk => t <= mk.date);
     if(activeIdx === -1) activeIdx = marcos.length - 1;
     const activeMarco = marcos[activeIdx];
     const remaining = activeMarco.value - accToday;
 
-    legend.innerHTML = datasets.map(ds => `<span><span class="dot" style="background:${ds.borderColor}"></span>${ds.label}</span>`).join('');
-
-    document.getElementById('marcorow_'+c.key).innerHTML = marcos.map((mk,i) => `
-      <div class="marco-chip ${i===activeIdx?'active':''}">
-        <div class="mc-label" style="${i===activeIdx?'':'color:'+MARCO_COLORS[i % MARCO_COLORS.length]}">${mk.label} · ${mk.sat.split('-').reverse().join('/')}</div>
-        <div class="mc-val">${fmt(mk.value)} ${c.unit}</div>
-      </div>`).join('');
-
-    const gapEl = document.getElementById('gapline_'+c.key);
-    gapEl.style.color = remaining > 0 ? 'var(--crit)' : 'var(--ok)';
-    gapEl.textContent = remaining > 0
-      ? `Falta ${fmt(remaining)} ${c.unit} para o ${activeMarco.label} (${activeMarco.sat.split('-').reverse().join('/')})`
-      : `${activeMarco.label} batido ✓`;
+    legend.innerHTML = datasets.map(ds => `<span><span class="dot" style="background:${ds.borderColor}"></span>${ds.label}</span>`).join('') +
+      `<span><span class="dot" style="background:#C0392B"></span>Realizado hoje / falta p/ ${activeMarco.label}</span>`;
 
     const marcoAnnotations = {};
     marcos.forEach((mk,i) => {
       marcoAnnotations['marco'+i] = {
         type:'line', yMin:mk.value, yMax:mk.value,
-        borderColor: i===activeIdx ? MARCO_COLORS[i % MARCO_COLORS.length] : '#e1e0d9',
-        borderWidth: i===activeIdx ? 1.5 : 1,
-        borderDash: [3,3]
+        borderColor: i===activeIdx ? MARCO_COLORS[i % MARCO_COLORS.length] : '#c9c8c0',
+        borderWidth: i===activeIdx ? 2 : 1,
+        borderDash: i===activeIdx ? [] : [3,3],
+        label:{ display:true, content:mk.label+' ('+mk.date.split('-').reverse().join('/')+'): '+fmt(mk.value)+' '+c.unit,
+          position: i % 2 === 0 ? 'start' : 'end',
+          backgroundColor: i===activeIdx ? MARCO_COLORS[i % MARCO_COLORS.length] : '#9a998f',
+          color:'#fff', font:{size:9}, padding:3 }
       };
     });
+    marcoAnnotations['realLine'] = {
+      type:'line', yMin:accToday, yMax:accToday,
+      borderColor:'#C0392B', borderWidth:1.5, borderDash:[4,4],
+      label:{ display:true, content:'Realizado hoje: '+fmt(accToday)+' '+c.unit, position:'end',
+        backgroundColor:'#C0392B', color:'#fff', font:{size:10}, padding:4 }
+    };
 
     const maxVal = Math.max(c.goal, ...datasets.flatMap(ds => ds.data.filter(v=>v!==null)));
     const ctx = document.getElementById('pace_'+c.key);
@@ -545,6 +546,7 @@ function renderActivityCharts(){
       data:{ labels, datasets },
       options:{
         responsive:true, maintainAspectRatio:false,
+        layout:{ padding:{ top:24 } },
         plugins:{
           legend:{ display:false },
           tooltip:{ callbacks:{ label:(ctx)=> ctx.dataset.label+': '+fmt(ctx.parsed.y)+' '+c.unit } },
@@ -552,7 +554,7 @@ function renderActivityCharts(){
         },
         scales:{
           x:{ title:{display:true, text:'Dia útil', color:'#898781'}, ticks:{color:'#898781'}, grid:{display:false} },
-          y:{ min:0, max: maxVal*1.08, ticks:{color:'#898781', callback:v=>fmt(v)}, grid:{color:'#f0efe9'} }
+          y:{ min:0, max: maxVal*1.15, ticks:{color:'#898781', callback:v=>fmt(v)}, grid:{color:'#f0efe9'} }
         }
       }
     });
