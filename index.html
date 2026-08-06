@@ -11,23 +11,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 <style>
   :root{
-    --asphalt:#0A1F4D;
-    --asphalt-2:#0F2A63;
-    --brand:#002674;
-    --brand-light:#E7EBF5;
+    --asphalt:#050B18;
+    --asphalt-2:#0D1730;
+    --brand:#3E6BFF;
+    --brand-deep:#001C57;
+    --brand-light:#152242;
     --amber:#F2B33D;
-    --ok:#1E8E3E;
-    --ok-bg:#E8F5EA;
-    --warn:#D98C00;
-    --warn-bg:#FDF1DD;
-    --crit:#C0392B;
-    --crit-bg:#FBEAE8;
-    --bg:#F4F5F3;
-    --card:#FFFFFF;
-    --border:#E1E1DC;
-    --text:#22252A;
-    --text-2:#5B5F66;
-    --text-3:#8A8E94;
+    --orange:#E8792E;
+    --ok:#3DD07A;
+    --ok-bg:#123825;
+    --warn:#F2B33D;
+    --warn-bg:#3A2C0E;
+    --crit:#FF6B5E;
+    --crit-bg:#3A1614;
+    --bg:#0A1220;
+    --card:#111B33;
+    --card-2:#0D162B;
+    --border:#22304F;
+    --text:#F0F2F7;
+    --text-2:#A9B2C6;
+    --text-3:#6F7A94;
   }
   *{box-sizing:border-box;}
   body{
@@ -37,25 +40,25 @@
   h1,h2,h3{font-family:'Oswald',sans-serif; font-weight:600; letter-spacing:.02em; margin:0;}
   .mono{font-family:'Roboto Mono',monospace;}
   header{
-    background:var(--asphalt); color:#fff; padding:1.5rem 1.25rem 1.75rem;
+    background:linear-gradient(135deg, var(--asphalt) 0%, var(--brand-deep) 130%); color:#fff; padding:1.5rem 1.25rem 1.75rem;
     position:relative;
   }
   header .top{display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap;}
   .brand-block{display:flex; align-items:center; gap:1rem;}
   .header-logo{height:42px; width:auto; flex-shrink:0;}
   header h1{font-size:20px; text-transform:uppercase;}
-  header .sub{color:#B9BEC6; font-size:13px; margin-top:4px;}
+  header .sub{color:#8E9BC4; font-size:13px; margin-top:4px;}
   header .datebox{
-    background:var(--asphalt-2); border-radius:8px; padding:.6rem .9rem; text-align:right;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); border-radius:8px; padding:.6rem .9rem; text-align:right;
   }
-  header .datebox .d1{font-size:12px; color:#B9BEC6;}
+  header .datebox .d1{font-size:12px; color:#8E9BC4;}
   header .datebox .d2{font-size:16px; font-weight:600; font-family:'Roboto Mono',monospace;}
   .roadline{
     height:6px; margin-top:1.25rem;
-    background-image:repeating-linear-gradient(90deg, var(--amber) 0 26px, transparent 26px 46px);
+    background-image:repeating-linear-gradient(90deg, var(--orange) 0 26px, transparent 26px 46px);
     border-radius:3px; opacity:.9;
   }
-  main{max-width:1040px; margin:0 auto; padding:0 1.25rem;}
+  main{max-width:1100px; margin:0 auto; padding:0 1.25rem;}
   section{margin-top:1.75rem;}
   .section-title{font-size:14px; text-transform:uppercase; color:var(--text-2); letter-spacing:.06em; margin-bottom:.75rem; font-weight:600;}
   .card{background:var(--card); border:1px solid var(--border); border-radius:10px;}
@@ -66,18 +69,18 @@
   .field label{font-size:12px; color:var(--text-2);}
   .field input, .field select{
     border:1px solid var(--border); border-radius:6px; padding:8px 10px; font-size:14px;
-    font-family:'Inter',sans-serif; background:#fff; color:var(--text); min-width:150px;
+    font-family:'Inter',sans-serif; background:var(--card-2); color:var(--text); min-width:150px;
   }
   .field.grow{flex:1; min-width:200px;}
   button{
     background:var(--brand); color:#fff; border:none; border-radius:6px;
     padding:9px 18px; font-size:14px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif;
   }
-  button:hover{background:#274C71;}
+  button:hover{background:#5A82FF;}
   button.ghost{
     background:transparent; color:var(--text-2); border:1px solid var(--border); padding:6px 10px; font-size:12px;
   }
-  button.ghost:hover{background:#F2F2F0;}
+  button.ghost:hover{background:var(--card-2); color:var(--text);}
 
   .cards-grid{
     display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px;
@@ -89,11 +92,11 @@
   .pcard .pval{font-family:'Roboto Mono',monospace; font-size:22px; font-weight:500;}
   .pcard .pgoal{font-size:12px; color:var(--text-3); font-family:'Roboto Mono',monospace;}
   .bar-track{
-    height:10px; border-radius:5px; background:#ECECE8; margin-top:10px; position:relative; overflow:hidden;
+    height:10px; border-radius:5px; background:var(--card-2); margin-top:10px; position:relative; overflow:hidden; border:1px solid var(--border);
   }
   .bar-fill{height:100%; border-radius:5px;}
   .bar-expected{
-    position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--asphalt);
+    position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--text-2);
   }
   .pmeta{display:flex; justify-content:space-between; margin-top:8px; font-size:12px; color:var(--text-2);}
   .badge{
@@ -103,15 +106,15 @@
   .badge.ok{background:var(--ok-bg); color:var(--ok);}
   .badge.warn{background:var(--warn-bg); color:var(--warn);}
   .badge.crit{background:var(--crit-bg); color:var(--crit);}
-  .badge.none{background:#EEEEEA; color:var(--text-3);}
+  .badge.none{background:var(--card-2); color:var(--text-3);}
 
   .today-strip{display:flex; gap:10px; flex-wrap:wrap;}
   .tchip{
-    background:var(--brand-light); border-radius:8px; padding:.6rem .9rem; min-width:150px;
+    background:var(--brand-light); border:1px solid var(--border); border-radius:8px; padding:.6rem .9rem; min-width:150px;
   }
-  .tchip .tn{font-size:12px; color:var(--brand); font-weight:600;}
+  .tchip .tn{font-size:12px; color:#8FACFF; font-weight:600;}
   .tchip .tv{font-family:'Roboto Mono',monospace; font-size:18px; margin-top:2px;}
-  .tchip.empty{background:#F0F0EC; color:var(--text-3);}
+  .tchip.empty{background:var(--card-2); color:var(--text-3);}
   .tchip.empty .tn{color:var(--text-3);}
 
   table{width:100%; border-collapse:collapse; font-size:13px;}
@@ -142,31 +145,36 @@
   .achart-canvasbox{position:relative; width:100%; height:270px; margin-top:6px;}
   #stripDate{
     border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:13px;
-    font-family:'Roboto Mono',monospace; color:var(--brand); background:var(--brand-light);
+    font-family:'Roboto Mono',monospace; color:#8FACFF; background:var(--brand-light);
     text-transform:none; letter-spacing:0; font-weight:500; cursor:pointer;
+    color-scheme: dark;
   }
-  #stripDate::-webkit-calendar-picker-indicator{ filter:invert(28%) sepia(50%) saturate(1000%) hue-rotate(180deg); cursor:pointer; }
-  #histCatSelect{
-    border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:12px;
-    font-family:'Inter',sans-serif; text-transform:none; letter-spacing:0; font-weight:500;
-    color:var(--text); background:#fff; cursor:pointer;
+  #stripDate::-webkit-calendar-picker-indicator{ filter:invert(1); cursor:pointer; }
+  .tile-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .tile-btn{
+    border:1px solid var(--border); border-radius:8px; padding:8px 14px; font-size:12px; font-weight:600;
+    font-family:'Inter',sans-serif; color:var(--text-2); background:var(--card-2); cursor:pointer;
+    text-transform:none; letter-spacing:0; transition:background .12s, color .12s, border-color .12s;
   }
+  .tile-btn:hover{ border-color:var(--brand); color:var(--text); }
+  .tile-btn.active{ background:var(--brand); border-color:var(--brand); color:#fff; }
   .hist-canvasbox{position:relative; width:100%; height:280px;}
   .marco-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
   .marco-chip{
     flex:1; min-width:150px; border-radius:8px; padding:.5rem .7rem; font-size:12px;
-    border:1px solid var(--border); background:#FAFAF8;
+    border:1px solid var(--border); background:var(--card-2);
   }
   .marco-chip.active{ border-color:var(--brand); background:var(--brand-light); }
   .marco-chip .mc-label{ font-weight:600; color:var(--text-2); font-size:11px; text-transform:uppercase; letter-spacing:.03em; }
-  .marco-chip.active .mc-label{ color:var(--brand); }
+  .marco-chip.active .mc-label{ color:#8FACFF; }
   .marco-chip .mc-val{ font-family:'Roboto Mono',monospace; margin-top:2px; }
   .gap-line{ margin-top:8px; font-size:13px; font-weight:600; }
   .legend-row{display:flex; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--text-2); margin-bottom:10px;}
   .legend-row span{display:flex; align-items:center; gap:5px;}
   .dot{width:9px; height:9px; border-radius:2px; display:inline-block;}
   .note{font-size:12px; color:var(--text-3); margin-top:.6rem; line-height:1.5;}
-  footer{max-width:1040px; margin:2rem auto 0; padding:0 1.25rem; font-size:12px; color:var(--text-3); line-height:1.6;}
+  footer{max-width:1100px; margin:2rem auto 0; padding:0 1.25rem; font-size:12px; color:var(--text-3); line-height:1.6;}
+  footer a{ color:#8FACFF !important; }
 </style>
 </head>
 <body>
@@ -221,7 +229,7 @@
   <section>
     <div class="section-title" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
       <span>Histórico de apontamentos</span>
-      <select id="histCatSelect" onchange="renderHistChart()"></select>
+      <div class="tile-row" id="histCatSelect"></div>
     </div>
     <div class="card" style="padding:1rem 1.1rem;">
       <div class="hist-canvasbox"><canvas id="histChart"></canvas></div>
@@ -243,7 +251,7 @@ let CATS = [
   { key:'terra_tronco', name:'Terraplanagem compactação — Tronco', resp:'Frentes 02 a 06', unit:'m³', goal:127756, color:'#1baf7a' },
   { key:'terra_primavera', name:'Terraplanagem compactação — Primavera (713-714)', resp:'Dedé', unit:'m³', goal:64000, color:'#eda100' },
   { key:'bueiro_josias', name:'Lançamento de bueiros — Josias', resp:'732-745', unit:'linhas', goal:32, color:'#e87ba4' },
-  { key:'bueiro_daniel', name:'Lançamento de bueiros — Daniel', resp:'713-714 Marg. Norte', unit:'m', goal:850, color:'#4a3aa7' }
+  { key:'bueiro_daniel', name:'Lançamento de bueiros — Daniel', resp:'713-714 Marg. Norte', unit:'m', goal:850, color:'#9B7EF0' }
 ];
 
 const MONTH_YEAR = {year:2026, month:8};
@@ -407,7 +415,7 @@ function renderCards(){
 
 let chartInstances = {};
 let histChartInstance = null;
-const MARCO_COLORS = ['#8a5ac9','#c96a5a','#3fa796','#eda100'];
+const MARCO_COLORS = ['#9B7EF0','#E8792E','#3FD0B0','#F2B33D'];
 
 function requiredLineForSaturday(c, satDate){
   const t = todayISO();
@@ -451,7 +459,7 @@ function buildActivityChart(c){
   });
 
   const datasets = [
-    { label:'Ritmo ideal', data: idealLine, borderColor:'#c3c2b7', borderDash:[5,4], borderWidth:1.5, pointRadius:0, order:3 },
+    { label:'Ritmo ideal', data: idealLine, borderColor:'#4A5578', borderDash:[5,4], borderWidth:1.5, pointRadius:0, order:3 },
     { label:'Realizado', data: realLine, borderColor:c.color, backgroundColor:c.color, borderWidth:2.5, pointRadius:0, tension:.15, spanGaps:false, order:1 }
   ];
 
@@ -516,13 +524,13 @@ function renderActivityCharts(){
     const remaining = activeMarco.value - accToday;
 
     legend.innerHTML = datasets.map(ds => `<span><span class="dot" style="background:${ds.borderColor}"></span>${ds.label}</span>`).join('') +
-      `<span><span class="dot" style="background:#C0392B"></span>Realizado hoje / falta p/ ${activeMarco.label}</span>`;
+      `<span><span class="dot" style="background:#E5473A"></span>Realizado hoje / falta p/ ${activeMarco.label}</span>`;
 
     const marcoAnnotations = {};
     marcos.forEach((mk,i) => {
       if(mk.date < t) return; // marco ja passou - some do grafico automaticamente
       const isActive = i === activeIdx;
-      const clr = isActive ? MARCO_COLORS[i % MARCO_COLORS.length] : '#b9b8ae';
+      const clr = isActive ? MARCO_COLORS[i % MARCO_COLORS.length] : '#4A5578';
       marcoAnnotations['marco'+i] = {
         type:'line', yMin:mk.value, yMax:mk.value,
         borderColor: clr,
@@ -536,9 +544,9 @@ function renderActivityCharts(){
     });
     marcoAnnotations['realLine'] = {
       type:'line', yMin:accToday, yMax:accToday,
-      borderColor:'#C0392B', borderWidth:1.5, borderDash:[4,4],
+      borderColor:'#E5473A', borderWidth:1.5, borderDash:[4,4],
       label:{ display:true, content:'Realizado hoje: '+fmt(accToday)+' '+c.unit, position:'end',
-        backgroundColor:'#C0392B', color:'#fff', font:{size:10}, padding:4 }
+        backgroundColor:'#E5473A', color:'#fff', font:{size:10}, padding:4 }
     };
     marcoAnnotations['gapLabel'] = {
       type:'label',
@@ -547,7 +555,7 @@ function renderActivityCharts(){
       content: remaining > 0
         ? ['Falta '+fmt(remaining)+' '+c.unit+' p/ '+activeMarco.label+' ('+activeMarco.date.split('-').reverse().join('/')+')']
         : [activeMarco.label+' batido ✓'],
-      color:'#fff', font:{size:11, weight:'600'}, backgroundColor:'#C0392B', padding:5, borderRadius:4
+      color:'#fff', font:{size:11, weight:'600'}, backgroundColor:'#E5473A', padding:5, borderRadius:4
     };
 
 
@@ -566,8 +574,8 @@ function renderActivityCharts(){
           annotation:{ annotations: marcoAnnotations }
         },
         scales:{
-          x:{ title:{display:true, text:'Dia útil', color:'#898781'}, ticks:{color:'#898781'}, grid:{display:false} },
-          y:{ min:0, max: maxVal*1.15, ticks:{color:'#898781', callback:v=>fmt(v)}, grid:{color:'#f0efe9'} }
+          x:{ title:{display:true, text:'Dia útil', color:'#8891A8'}, ticks:{color:'#8891A8'}, grid:{display:false} },
+          y:{ min:0, max: maxVal*1.15, ticks:{color:'#8891A8', callback:v=>fmt(v)}, grid:{color:'#1C2842'} }
         }
       }
     });
@@ -579,17 +587,22 @@ function renderActivityCharts(){
   });
 }
 
+let histSelectedKey = null;
+
 function populateHistSelect(){
-  const sel = document.getElementById('histCatSelect');
-  if(sel.dataset.built) return;
-  sel.innerHTML = CATS.map(c => `<option value="${c.key}">${c.name}</option>`).join('');
-  sel.dataset.built = '1';
+  const wrap = document.getElementById('histCatSelect');
+  if(!histSelectedKey) histSelectedKey = CATS[0].key;
+  wrap.innerHTML = CATS.map(c => `<button type="button" class="tile-btn ${c.key===histSelectedKey?'active':''}" onclick="selectHistCat('${c.key}')">${c.name}</button>`).join('');
+}
+
+function selectHistCat(key){
+  histSelectedKey = key;
+  renderHistChart();
 }
 
 function renderHistChart(){
   populateHistSelect();
-  const sel = document.getElementById('histCatSelect');
-  const c = CATS.find(x => x.key === sel.value) || CATS[0];
+  const c = CATS.find(x => x.key === histSelectedKey) || CATS[0];
   const m = monthEntries(c.key);
   const dates = Object.keys(m).sort();
   const labels = dates.map(d => d.split('-').reverse().join('/'));
@@ -608,8 +621,8 @@ function renderHistChart(){
         tooltip:{ callbacks:{ label:(ctx)=> fmt(ctx.parsed.y)+' '+c.unit } }
       },
       scales:{
-        x:{ ticks:{color:'#898781'}, grid:{display:false} },
-        y:{ ticks:{color:'#898781', callback:v=>fmt(v)}, grid:{color:'#f0efe9'} }
+        x:{ ticks:{color:'#8891A8'}, grid:{display:false} },
+        y:{ ticks:{color:'#8891A8', callback:v=>fmt(v)}, grid:{color:'#1C2842'} }
       }
     }
   });
