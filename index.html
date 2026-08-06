@@ -522,16 +522,13 @@ function renderActivityCharts(){
     marcos.forEach((mk,i) => {
       if(mk.date < t) return; // marco ja passou - some do grafico automaticamente
       const isActive = i === activeIdx;
-      const gapTxt = isActive
-        ? (remaining > 0 ? ' — faltam '+fmt(remaining)+' '+c.unit : ' — batido ✓')
-        : '';
       const clr = isActive ? MARCO_COLORS[i % MARCO_COLORS.length] : '#b9b8ae';
       marcoAnnotations['marco'+i] = {
         type:'line', yMin:mk.value, yMax:mk.value,
         borderColor: clr,
         borderWidth: isActive ? 2.5 : 1,
         borderDash: isActive ? [] : [3,3],
-        label:{ display:true, content:mk.label+' ('+mk.date.split('-').reverse().join('/')+'): '+fmt(mk.value)+' '+c.unit+gapTxt,
+        label:{ display:true, content:mk.label+' ('+mk.date.split('-').reverse().join('/')+'): '+fmt(mk.value)+' '+c.unit,
           position: i % 2 === 0 ? 'start' : 'end',
           backgroundColor: clr,
           color:'#fff', font:{size: isActive ? 10 : 9, weight: isActive ? '600' : '400'}, padding: isActive ? 5 : 3 }
@@ -543,6 +540,16 @@ function renderActivityCharts(){
       label:{ display:true, content:'Realizado hoje: '+fmt(accToday)+' '+c.unit, position:'end',
         backgroundColor:'#C0392B', color:'#fff', font:{size:10}, padding:4 }
     };
+    marcoAnnotations['gapLabel'] = {
+      type:'label',
+      xValue: Math.min(Math.max(Math.round(TOTAL_WORK_DAYS*0.55), 3), TOTAL_WORK_DAYS-2),
+      yValue: (activeMarco.value + accToday) / 2,
+      content: remaining > 0
+        ? ['Falta '+fmt(remaining)+' '+c.unit+' p/ '+activeMarco.label+' ('+activeMarco.date.split('-').reverse().join('/')+')']
+        : [activeMarco.label+' batido ✓'],
+      color:'#fff', font:{size:11, weight:'600'}, backgroundColor:'#C0392B', padding:5, borderRadius:4
+    };
+
 
     const maxVal = Math.max(c.goal, ...datasets.flatMap(ds => ds.data.filter(v=>v!==null)));
     const ctx = document.getElementById('pace_'+c.key);
