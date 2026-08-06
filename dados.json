@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T12:16:52.284005Z",
+  "updated_at": "2026-08-06T12:20:21.459917Z",
   "month": {
     "year": 2026,
     "month": 8
@@ -40,7 +40,7 @@
     {
       "key": "bueiro_josias",
       "name": "Lançamento de Bueiros — Josias",
-      "resp": "732-745 · 2 galerias",
+      "resp": "Josias e Jhonny · 732-745 · 2 galerias",
       "unit": "linhas",
       "goal": 34,
       "color": "#e87ba4"
@@ -48,7 +48,7 @@
     {
       "key": "bueiro_daniel",
       "name": "Lançamento de Bueiros — Daniel",
-      "resp": "713-714 Marg. Norte",
+      "resp": "Daniel · 713-714 Marg. Norte",
       "unit": "m",
       "goal": 1416,
       "color": "#9B7EF0"
