@@ -138,6 +138,28 @@
   .achart-head .an{font-size:14px; font-weight:600;}
   .achart-head .ar{font-size:12px; color:var(--text-3);}
   .achart-canvasbox{position:relative; width:100%; height:230px; margin-top:6px;}
+  #stripDate{
+    border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:13px;
+    font-family:'Roboto Mono',monospace; color:var(--brand); background:var(--brand-light);
+    text-transform:none; letter-spacing:0; font-weight:500; cursor:pointer;
+  }
+  #stripDate::-webkit-calendar-picker-indicator{ filter:invert(28%) sepia(50%) saturate(1000%) hue-rotate(180deg); cursor:pointer; }
+  #histCatSelect{
+    border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:12px;
+    font-family:'Inter',sans-serif; text-transform:none; letter-spacing:0; font-weight:500;
+    color:var(--text); background:#fff; cursor:pointer;
+  }
+  .hist-canvasbox{position:relative; width:100%; height:280px;}
+  .marco-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+  .marco-chip{
+    flex:1; min-width:150px; border-radius:8px; padding:.5rem .7rem; font-size:12px;
+    border:1px solid var(--border); background:#FAFAF8;
+  }
+  .marco-chip.active{ border-color:var(--brand); background:var(--brand-light); }
+  .marco-chip .mc-label{ font-weight:600; color:var(--text-2); font-size:11px; text-transform:uppercase; letter-spacing:.03em; }
+  .marco-chip.active .mc-label{ color:var(--brand); }
+  .marco-chip .mc-val{ font-family:'Roboto Mono',monospace; margin-top:2px; }
+  .gap-line{ margin-top:8px; font-size:13px; font-weight:600; }
   .legend-row{display:flex; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--text-2); margin-bottom:10px;}
   .legend-row span{display:flex; align-items:center; gap:5px;}
   .dot{width:9px; height:9px; border-radius:2px; display:inline-block;}
@@ -188,17 +210,17 @@
 
   <section>
     <div class="section-title">Ritmo por atividade</div>
-    <div class="note" style="margin:0 0 .9rem;">
-      Linha cinza tracejada = ritmo ideal até o fim do mês. Linha colorida sólida = realizado (para no último dia apontado).
-      Linhas pontilhadas coloridas = ritmo necessário para bater a meta, recalculado em cada sábado de checagem (08, 15, 22 e 29/08) a partir do que foi realizado até aquele sábado — cada uma só aparece depois que o sábado correspondente já passou.
-      As 4 linhas de meta parcial (1ª a 4ª, uma por sábado) ficam sempre visíveis; a comparação "falta X p/ meta" usa a meta ativa no momento — 1ª meta até 08/08, depois passa a usar a 2ª automaticamente, e assim por diante.
-    </div>
     <div id="activityCharts"></div>
   </section>
 
   <section>
-    <div class="section-title">Histórico de apontamentos</div>
-    <div id="logsWrap"></div>
+    <div class="section-title" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+      <span>Histórico de apontamentos</span>
+      <select id="histCatSelect" onchange="renderHistChart()"></select>
+    </div>
+    <div class="card" style="padding:1rem 1.1rem;">
+      <div class="hist-canvasbox"><canvas id="histChart"></canvas></div>
+    </div>
   </section>
 
 </main>
@@ -379,7 +401,8 @@ function renderCards(){
 }
 
 let chartInstances = {};
-const SAT_COLORS = ['#8a5ac9','#c96a5a','#3fa796','#c9a23f'];
+let histChartInstance = null;
+const MARCO_COLORS = ['#8a5ac9','#c96a5a','#3fa796','#eda100'];
 
 function requiredLineForSaturday(c, satDate){
   const t = todayISO();
@@ -397,9 +420,18 @@ function requiredLineForSaturday(c, satDate){
   });
 }
 
+function marcosFor(c){
+  // 1o a 3o Marco = pontos intermediarios (sabados de checagem, exceto o ultimo); o ultimo sabado = "Meta"
+  return CHECK_SATS.map((sat, i) => ({
+    sat,
+    value: c.goal * (workingDayIndex(sat)/TOTAL_WORK_DAYS),
+    label: i === CHECK_SATS.length-1 ? 'Meta' : (i+1)+'° Marco'
+  }));
+}
+
 function buildActivityChart(c){
   const labels = WORK_DAYS.map((d,i)=>i+1);
-  const metaLine = WORK_DAYS.map((d,i)=> +(c.goal*(i+1)/TOTAL_WORK_DAYS).toFixed(1));
+  const idealLine = WORK_DAYS.map((d,i)=> +(c.goal*(i+1)/TOTAL_WORK_DAYS).toFixed(1));
 
   const m = monthEntries(c.key);
   const entryDates = Object.keys(m);
@@ -410,21 +442,22 @@ function buildActivityChart(c){
   });
 
   const datasets = [
-    { label:'Meta', data: metaLine, borderColor:'#c3c2b7', borderDash:[5,4], borderWidth:1.5, pointRadius:0 },
-    { label:'Realizado', data: realLine, borderColor:c.color, backgroundColor:c.color, borderWidth:2.5, pointRadius:0, tension:.15, spanGaps:false }
+    { label:'Ritmo ideal', data: idealLine, borderColor:'#c3c2b7', borderDash:[5,4], borderWidth:1.5, pointRadius:0, order:3 },
+    { label:'Realizado', data: realLine, borderColor:c.color, backgroundColor:c.color, borderWidth:2.5, pointRadius:0, tension:.15, spanGaps:false, order:1 }
   ];
 
   CHECK_SATS.forEach((sat, i) => {
     const line = requiredLineForSaturday(c, sat);
     if(line){
       datasets.push({
-        label:`Ritmo necessário a partir de ${sat.split('-').reverse().join('/')}`,
+        label:`Ritmo necessário após ${sat.split('-').reverse().join('/')}`,
         data: line,
-        borderColor: SAT_COLORS[i % SAT_COLORS.length],
+        borderColor: MARCO_COLORS[i % MARCO_COLORS.length],
         borderWidth:1.5,
         borderDash:[2,3],
         pointRadius:0,
-        spanGaps:false
+        spanGaps:false,
+        order:2
       });
     }
   });
@@ -456,6 +489,8 @@ function renderActivityCharts(){
         </div>
         <div class="legend-row" id="legend_${c.key}"></div>
         <div class="achart-canvasbox"><canvas id="pace_${c.key}"></canvas></div>
+        <div class="marco-row" id="marcorow_${c.key}"></div>
+        <div class="gap-line" id="gapline_${c.key}"></div>
       </div>
     `).join('');
     wrap.dataset.built = '1';
@@ -465,40 +500,39 @@ function renderActivityCharts(){
    try{
     const { labels, datasets } = buildActivityChart(c);
     const legend = document.getElementById('legend_'+c.key);
-
     const accToday = accumulated(c.key);
-
-    // valor da meta parcial em cada sabado de checagem (ponto do ritmo ideal naquele dia)
-    const subMetas = CHECK_SATS.map(sat => ({
-      sat, value: c.goal * (workingDayIndex(sat)/TOTAL_WORK_DAYS)
-    }));
-    // meta ativa: a primeira cujo sabado ainda nao passou; se todas passaram, usa a ultima
+    const marcos = marcosFor(c);
     const t = todayISO();
-    let activeIdx = subMetas.findIndex(sm => t <= sm.sat);
-    if(activeIdx === -1) activeIdx = subMetas.length - 1;
-    const activeMeta = subMetas[activeIdx];
-    const remaining = activeMeta.value - accToday;
+    let activeIdx = marcos.findIndex(mk => t <= mk.sat);
+    if(activeIdx === -1) activeIdx = marcos.length - 1;
+    const activeMarco = marcos[activeIdx];
+    const remaining = activeMarco.value - accToday;
 
-    legend.innerHTML = datasets.map(ds => `<span><span class="dot" style="background:${ds.borderColor}"></span>${ds.label}</span>`).join('') +
-      subMetas.map((sm,i) => `<span><span class="dot" style="background:${SAT_COLORS[i % SAT_COLORS.length]}"></span>${i+1}ª meta (${sm.sat.split('-').reverse().join('/')}): ${fmt(sm.value)} ${c.unit}${i===activeIdx?' — em uso':''}</span>`).join('') +
-      `<span><span class="dot" style="background:#C0392B"></span>Realizado hoje / falta p/ meta ativa</span>`;
+    legend.innerHTML = datasets.map(ds => `<span><span class="dot" style="background:${ds.borderColor}"></span>${ds.label}</span>`).join('');
 
-    const maxVal = Math.max(c.goal, ...datasets.flatMap(ds => ds.data.filter(v=>v!==null)));
-    const midX = Math.min(Math.max(Math.round(TOTAL_WORK_DAYS*0.6), 2), TOTAL_WORK_DAYS-1);
+    document.getElementById('marcorow_'+c.key).innerHTML = marcos.map((mk,i) => `
+      <div class="marco-chip ${i===activeIdx?'active':''}">
+        <div class="mc-label" style="${i===activeIdx?'':'color:'+MARCO_COLORS[i % MARCO_COLORS.length]}">${mk.label} · ${mk.sat.split('-').reverse().join('/')}</div>
+        <div class="mc-val">${fmt(mk.value)} ${c.unit}</div>
+      </div>`).join('');
 
-    const subMetaAnnotations = {};
-    subMetas.forEach((sm,i) => {
-      subMetaAnnotations['sub'+i] = {
-        type:'line', yMin:sm.value, yMax:sm.value,
-        borderColor: i===activeIdx ? '#C0392B' : SAT_COLORS[i % SAT_COLORS.length],
-        borderWidth: i===activeIdx ? 2 : 1,
-        borderDash: i===activeIdx ? [] : [3,3],
-        label:{ display:true, content:(i+1)+'ª meta ('+sm.sat.split('-').reverse().join('/')+'): '+fmt(sm.value)+' '+c.unit,
-          position:'start', backgroundColor: i===activeIdx ? '#C0392B' : SAT_COLORS[i % SAT_COLORS.length],
-          color:'#fff', font:{size:9}, padding:3 }
+    const gapEl = document.getElementById('gapline_'+c.key);
+    gapEl.style.color = remaining > 0 ? 'var(--crit)' : 'var(--ok)';
+    gapEl.textContent = remaining > 0
+      ? `Falta ${fmt(remaining)} ${c.unit} para o ${activeMarco.label} (${activeMarco.sat.split('-').reverse().join('/')})`
+      : `${activeMarco.label} batido ✓`;
+
+    const marcoAnnotations = {};
+    marcos.forEach((mk,i) => {
+      marcoAnnotations['marco'+i] = {
+        type:'line', yMin:mk.value, yMax:mk.value,
+        borderColor: i===activeIdx ? MARCO_COLORS[i % MARCO_COLORS.length] : '#e1e0d9',
+        borderWidth: i===activeIdx ? 1.5 : 1,
+        borderDash: [3,3]
       };
     });
 
+    const maxVal = Math.max(c.goal, ...datasets.flatMap(ds => ds.data.filter(v=>v!==null)));
     const ctx = document.getElementById('pace_'+c.key);
     if(chartInstances[c.key]) chartInstances[c.key].destroy();
     chartInstances[c.key] = new Chart(ctx, {
@@ -506,32 +540,14 @@ function renderActivityCharts(){
       data:{ labels, datasets },
       options:{
         responsive:true, maintainAspectRatio:false,
-        layout:{ padding:{ top:22 } },
         plugins:{
           legend:{ display:false },
           tooltip:{ callbacks:{ label:(ctx)=> ctx.dataset.label+': '+fmt(ctx.parsed.y)+' '+c.unit } },
-          annotation:{
-            annotations:{
-              ...subMetaAnnotations,
-              realLine:{
-                type:'line', yMin:accToday, yMax:accToday,
-                borderColor:'#C0392B', borderWidth:1.5, borderDash:[4,4],
-                label:{ display:true, content:'Realizado hoje: '+fmt(accToday)+' '+c.unit, position:'end',
-                  backgroundColor:'#C0392B', color:'#fff', font:{size:10}, padding:4 }
-              },
-              gapLabel:{
-                type:'label', xValue: midX, yValue:(activeMeta.value+accToday)/2,
-                content: remaining > 0
-                  ? ['Falta '+fmt(remaining)+' '+c.unit+' p/ '+(activeIdx+1)+'ª meta ('+activeMeta.sat.split('-').reverse().join('/')+')']
-                  : [(activeIdx+1)+'ª meta batida ✓'],
-                color:'#C0392B', font:{size:12, weight:'600'}, backgroundColor:'rgba(255,255,255,.85)', padding:4
-              }
-            }
-          }
+          annotation:{ annotations: marcoAnnotations }
         },
         scales:{
-          x:{ title:{display:true, text:'Dia útil', color:'#898781'}, ticks:{color:'#898781'}, grid:{color:'#e1e0d9'} },
-          y:{ min:0, max: maxVal*1.08, ticks:{color:'#898781', callback:v=>fmt(v)}, grid:{color:'#e1e0d9'} }
+          x:{ title:{display:true, text:'Dia útil', color:'#898781'}, ticks:{color:'#898781'}, grid:{display:false} },
+          y:{ min:0, max: maxVal*1.08, ticks:{color:'#898781', callback:v=>fmt(v)}, grid:{color:'#f0efe9'} }
         }
       }
     });
@@ -543,29 +559,44 @@ function renderActivityCharts(){
   });
 }
 
-function renderLogs(){
-  const wrap = document.getElementById('logsWrap');
-  wrap.innerHTML = CATS.map(c => {
-    const m = monthEntries(c.key);
-    const dates = Object.keys(m).sort();
-    const rows = dates.map(d => `<tr>
-        <td>${d.split('-').reverse().join('/')}</td>
-        <td class="num">${fmt(m[d])} ${c.unit}</td>
-      </tr>`).join('');
-    return `<details class="log-cat card" style="margin-bottom:10px;">
-      <summary>${c.name} <span class="chev">${dates.length} apontamento(s) ▾</span></summary>
-      <div class="inner">
-        <table>
-          <thead><tr><th>Data</th><th class="num">Produção</th></tr></thead>
-          <tbody>${rows || '<tr><td colspan="2" style="color:var(--text-3);">Sem apontamentos.</td></tr>'}</tbody>
-        </table>
-      </div>
-    </details>`;
-  }).join('');
+function populateHistSelect(){
+  const sel = document.getElementById('histCatSelect');
+  if(sel.dataset.built) return;
+  sel.innerHTML = CATS.map(c => `<option value="${c.key}">${c.name}</option>`).join('');
+  sel.dataset.built = '1';
+}
+
+function renderHistChart(){
+  populateHistSelect();
+  const sel = document.getElementById('histCatSelect');
+  const c = CATS.find(x => x.key === sel.value) || CATS[0];
+  const m = monthEntries(c.key);
+  const dates = Object.keys(m).sort();
+  const labels = dates.map(d => d.split('-').reverse().join('/'));
+  const values = dates.map(d => m[d]);
+
+  if(typeof Chart === 'undefined') return;
+  const ctx = document.getElementById('histChart');
+  if(histChartInstance) histChartInstance.destroy();
+  histChartInstance = new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets:[{ label: c.name, data: values, backgroundColor: c.color, borderRadius:4, barThickness:28 }] },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ display:false },
+        tooltip:{ callbacks:{ label:(ctx)=> fmt(ctx.parsed.y)+' '+c.unit } }
+      },
+      scales:{
+        x:{ ticks:{color:'#898781'}, grid:{display:false} },
+        y:{ ticks:{color:'#898781', callback:v=>fmt(v)}, grid:{color:'#f0efe9'} }
+      }
+    }
+  });
 }
 
 function renderAll(){
-  const steps = [renderTodayStrip, renderCards, renderActivityCharts, renderLogs];
+  const steps = [renderTodayStrip, renderCards, renderActivityCharts, renderHistChart];
   for(const step of steps){
     try{ step(); }
     catch(err){ console.error('Falha em', step.name, err); }
