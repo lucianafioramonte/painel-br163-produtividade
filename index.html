@@ -175,9 +175,32 @@
   .note{font-size:12px; color:var(--text-3); margin-top:.6rem; line-height:1.5;}
   footer{max-width:1100px; margin:2rem auto 0; padding:0 1.25rem; font-size:12px; color:var(--text-3); line-height:1.6;}
   footer a{ color:#8FACFF !important; }
+  .pdf-bar{ max-width:1100px; margin:0 auto; padding:.9rem 1.25rem 0; display:flex; justify-content:flex-start; }
+  #printBtn{ display:inline-flex; align-items:center; gap:6px; }
+
+  /* ---- modo claro para geracao de PDF ---- */
+  :root.print-light{
+    --bg:#F7F7F5; --card:#FFFFFF; --card-2:#F0F0EC; --border:#DCDBD3;
+    --text:#22252A; --text-2:#5B5F66; --text-3:#8A8E94;
+    --brand-light:#E7EBF5; --ok-bg:#E8F5EA; --warn-bg:#FDF1DD; --crit-bg:#FBEAE8;
+  }
+  :root.print-light header{ background:var(--brand) !important; }
+  :root.print-light header .sub{ color:#CBD5F5; }
+  :root.print-light header .datebox{ background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.3); }
+  :root.print-light #printBtn, :root.print-light .pdf-bar{ display:none !important; }
+  @media print{
+    #printBtn, .pdf-bar{ display:none !important; }
+    body{ background:#fff; }
+    .achart-canvasbox, .hist-canvasbox{ break-inside:avoid; }
+    .card{ break-inside:avoid; }
+  }
 </style>
 </head>
 <body>
+
+<div class="pdf-bar">
+  <button id="printBtn" class="ghost" onclick="generatePDF()">🖨️ Gerar PDF</button>
+</div>
 
 <header>
   <div class="top">
@@ -258,6 +281,11 @@ function fmt(n){
 }
 function pct(n){ return Number(n).toLocaleString('pt-BR', {maximumFractionDigits:1}) + '%'; }
 function isoDate(d){ return d.toISOString().slice(0,10); }
+function isPrintMode(){ return document.documentElement.classList.contains('print-light'); }
+function chartTick(){ return isPrintMode() ? '#5B5F66' : '#8891A8'; }
+function chartGrid(){ return isPrintMode() ? '#E1E1DC' : '#1C2842'; }
+function chartMuted(){ return isPrintMode() ? '#B7B6AC' : '#4A5578'; }
+
 function todayISO(){
   const d = new Date();
   const y = d.getFullYear();
@@ -461,7 +489,7 @@ function buildActivityChart(c){
   });
 
   const datasets = [
-    { label:'Ritmo ideal', data: idealLine, borderColor:'#4A5578', borderDash:[5,4], borderWidth:1.5, pointRadius:0, order:3 },
+    { label:'Ritmo ideal', data: idealLine, borderColor:chartMuted(), borderDash:[5,4], borderWidth:1.5, pointRadius:0, order:3 },
     { label:'Realizado', data: realLine, borderColor:c.color, backgroundColor:c.color, borderWidth:2.5, pointRadius:0, tension:.15, spanGaps:false, order:1 }
   ];
 
@@ -532,7 +560,7 @@ function renderActivityCharts(){
     marcos.forEach((mk,i) => {
       if(mk.date < t) return; // marco ja passou - some do grafico automaticamente
       const isActive = i === activeIdx;
-      const clr = isActive ? MARCO_COLORS[i % MARCO_COLORS.length] : '#4A5578';
+      const clr = isActive ? MARCO_COLORS[i % MARCO_COLORS.length] : chartMuted();
       marcoAnnotations['marco'+i] = {
         type:'line', yMin:mk.value, yMax:mk.value,
         borderColor: clr,
@@ -576,8 +604,8 @@ function renderActivityCharts(){
           annotation:{ annotations: marcoAnnotations }
         },
         scales:{
-          x:{ title:{display:true, text:'Dia útil', color:'#8891A8'}, ticks:{color:'#8891A8'}, grid:{display:false} },
-          y:{ min:0, max: maxVal*1.15, ticks:{color:'#8891A8', callback:v=>fmt(v)}, grid:{color:'#1C2842'} }
+          x:{ title:{display:true, text:'Dia útil', color:chartTick()}, ticks:{color:chartTick()}, grid:{display:false} },
+          y:{ min:0, max: maxVal*1.15, ticks:{color:chartTick(), callback:v=>fmt(v)}, grid:{color:chartGrid()} }
         }
       }
     });
@@ -608,23 +636,32 @@ function renderHistChart(){
   const m = monthEntries(c.key);
   const dates = Object.keys(m).sort();
   const labels = dates.map(d => d.split('-').reverse().join('/'));
-  const values = dates.map(d => m[d]);
+  const values = dates.map(d => Number(m[d]));
+  let running = 0;
+  const cumulative = values.map(v => { running += v; return +running.toFixed(2); });
 
   if(typeof Chart === 'undefined') return;
   const ctx = document.getElementById('histChart');
   if(histChartInstance) histChartInstance.destroy();
   histChartInstance = new Chart(ctx, {
-    type:'bar',
-    data:{ labels, datasets:[{ label: c.name, data: values, backgroundColor: c.color, borderRadius:4, barThickness:28 }] },
+    data:{
+      labels,
+      datasets:[
+        { type:'bar', label:'Produção do dia', data: values, backgroundColor: c.color, borderRadius:4, barThickness:28, yAxisID:'y', order:2 },
+        { type:'line', label:'Acumulado no mês', data: cumulative, borderColor: MARCO_COLORS[3], backgroundColor:'transparent',
+          borderWidth:2.5, pointRadius:3, pointBackgroundColor: MARCO_COLORS[3], tension:.2, yAxisID:'y1', order:1 }
+      ]
+    },
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{
-        legend:{ display:false },
-        tooltip:{ callbacks:{ label:(ctx)=> fmt(ctx.parsed.y)+' '+c.unit } }
+        legend:{ display:true, position:'top', align:'end', labels:{ color: chartTick(), boxWidth:12, font:{size:11} } },
+        tooltip:{ callbacks:{ label:(ctx)=> ctx.dataset.label+': '+fmt(ctx.parsed.y)+' '+c.unit } }
       },
       scales:{
-        x:{ ticks:{color:'#8891A8'}, grid:{display:false} },
-        y:{ ticks:{color:'#8891A8', callback:v=>fmt(v)}, grid:{color:'#1C2842'} }
+        x:{ ticks:{color:chartTick()}, grid:{display:false} },
+        y:{ position:'left', title:{display:true, text:'Produção do dia', color:chartTick(), font:{size:11}}, ticks:{color:chartTick(), callback:v=>fmt(v)}, grid:{color:chartGrid()} },
+        y1:{ position:'right', title:{display:true, text:'Acumulado', color:chartTick(), font:{size:11}}, ticks:{color:chartTick(), callback:v=>fmt(v)}, grid:{display:false} }
       }
     }
   });
@@ -637,6 +674,18 @@ function renderAll(){
     catch(err){ console.error('Falha em', step.name, err); }
   }
 }
+
+function generatePDF(){
+  document.documentElement.classList.add('print-light');
+  renderAll(); // redesenha os graficos com as cores do modo claro
+  requestAnimationFrame(() => {
+    setTimeout(() => { window.print(); }, 150);
+  });
+}
+window.addEventListener('afterprint', () => {
+  document.documentElement.classList.remove('print-light');
+  renderAll();
+});
 
 (async function init(){
   populateForm();
