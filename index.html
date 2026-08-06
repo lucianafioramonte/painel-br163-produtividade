@@ -184,9 +184,13 @@
     --text:#22252A; --text-2:#5B5F66; --text-3:#8A8E94;
     --brand-light:#E7EBF5; --ok-bg:#E8F5EA; --warn-bg:#FDF1DD; --crit-bg:#FBEAE8;
   }
-  :root.print-light header{ background:var(--brand) !important; }
-  :root.print-light header .sub{ color:#CBD5F5; }
-  :root.print-light header .datebox{ background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.3); }
+  :root.print-light header{ background:#FFFFFF !important; color:#22252A !important; border-bottom:2px solid var(--brand); }
+  :root.print-light header h1{ color:#101426; }
+  :root.print-light header .sub{ color:#5B5F66; }
+  :root.print-light header .datebox{ background:#F0F0EC; border:1px solid #DCDBD3; }
+  :root.print-light header .datebox .d1{ color:#8A8E94; }
+  :root.print-light header .datebox .d2{ color:#101426; }
+  :root.print-light .roadline{ opacity:.6; }
   :root.print-light #printBtn, :root.print-light .pdf-bar{ display:none !important; }
   @media print{
     #printBtn, .pdf-bar{ display:none !important; }
@@ -205,7 +209,7 @@
 <header>
   <div class="top">
     <div class="brand-block">
-      <img src="assets/logo-branca.png" alt="Tripoloni Construtora" class="header-logo">
+      <img src="assets/logo-branca.png" alt="Tripoloni Construtora" class="header-logo" id="headerLogo">
       <div>
         <h1>Painel de produção — Duplicação BR-163</h1>
         <div class="sub">Lucas do Rio Verde / Sorriso — MT · Metas mensais de agosto/2026</div>
@@ -682,11 +686,13 @@ function renderAll(){
 
 function generatePDF(){
   document.documentElement.classList.add('print-light');
+  document.getElementById('headerLogo').src = 'assets/logo.png';
   renderAll(); // redesenha os graficos com as cores do modo claro (sem animacao, ja sai pronto)
   window.print(); // chamado sincrono, logo apos o clique, pra nao perder o gesto do usuario
 }
 window.addEventListener('afterprint', () => {
   document.documentElement.classList.remove('print-light');
+  document.getElementById('headerLogo').src = 'assets/logo-branca.png';
   renderAll();
 });
 
