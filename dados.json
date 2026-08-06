@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T12:07:25.511866Z",
+  "updated_at": "2026-08-06T12:16:52.284005Z",
   "month": {
     "year": 2026,
     "month": 8
@@ -34,15 +34,15 @@
       "name": "Terraplanagem Compactação — Primavera (713-714)",
       "resp": "Dedé",
       "unit": "m³",
-      "goal": 64000,
+      "goal": 32000,
       "color": "#eda100"
     },
     {
       "key": "bueiro_josias",
       "name": "Lançamento de Bueiros — Josias",
-      "resp": "732-745",
+      "resp": "732-745 · 2 galerias",
       "unit": "linhas",
-      "goal": 32,
+      "goal": 34,
       "color": "#e87ba4"
     },
     {
