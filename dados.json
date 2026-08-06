@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T11:59:07.386277Z",
+  "updated_at": "2026-08-06T12:04:34.691302Z",
   "month": {
     "year": 2026,
     "month": 8
@@ -127,7 +127,10 @@
       "2026-08-03": 0,
       "2026-08-04": 42
     },
-    "disp_caixas": {},
+    "disp_caixas": {
+      "2026-08-03": 4,
+      "2026-08-04": 2
+    },
     "disp_alas": {},
     "disp_dissipadores": {},
     "disp_enrocamento": {},
