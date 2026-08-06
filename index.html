@@ -11,10 +11,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 <style>
   :root{
-    --asphalt:#2B2E33;
-    --asphalt-2:#3A3E45;
-    --brand:#2F5D8A;
-    --brand-light:#E7EEF4;
+    --asphalt:#0A1F4D;
+    --asphalt-2:#0F2A63;
+    --brand:#002674;
+    --brand-light:#E7EBF5;
     --amber:#F2B33D;
     --ok:#1E8E3E;
     --ok-bg:#E8F5EA;
@@ -41,6 +41,8 @@
     position:relative;
   }
   header .top{display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap;}
+  .brand-block{display:flex; align-items:center; gap:1rem;}
+  .header-logo{height:42px; width:auto; flex-shrink:0;}
   header h1{font-size:20px; text-transform:uppercase;}
   header .sub{color:#B9BEC6; font-size:13px; margin-top:4px;}
   header .datebox{
@@ -171,9 +173,12 @@
 
 <header>
   <div class="top">
-    <div>
-      <h1>Painel de produção — Duplicação BR-163</h1>
-      <div class="sub">Lucas do Rio Verde / Sorriso — MT · Metas mensais de agosto/2026</div>
+    <div class="brand-block">
+      <img src="assets/logo-branca.png" alt="Tripoloni Construtora" class="header-logo">
+      <div>
+        <h1>Painel de produção — Duplicação BR-163</h1>
+        <div class="sub">Lucas do Rio Verde / Sorriso — MT · Metas mensais de agosto/2026</div>
+      </div>
     </div>
     <div class="datebox">
       <div class="d1">Hoje</div>
