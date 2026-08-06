@@ -596,7 +596,7 @@ function renderActivityCharts(){
       type:'line',
       data:{ labels, datasets },
       options:{
-        responsive:true, maintainAspectRatio:false,
+        responsive:true, maintainAspectRatio:false, animation:false,
         layout:{ padding:{ top:24 } },
         plugins:{
           legend:{ display:false },
@@ -653,7 +653,7 @@ function renderHistChart(){
       ]
     },
     options:{
-      responsive:true, maintainAspectRatio:false,
+      responsive:true, maintainAspectRatio:false, animation:false,
       plugins:{
         legend:{ display:true, position:'top', align:'end', labels:{ color: chartTick(), boxWidth:12, font:{size:11} } },
         tooltip:{ callbacks:{ label:(ctx)=> ctx.dataset.label+': '+fmt(ctx.parsed.y)+' '+c.unit } }
@@ -677,10 +677,8 @@ function renderAll(){
 
 function generatePDF(){
   document.documentElement.classList.add('print-light');
-  renderAll(); // redesenha os graficos com as cores do modo claro
-  requestAnimationFrame(() => {
-    setTimeout(() => { window.print(); }, 150);
-  });
+  renderAll(); // redesenha os graficos com as cores do modo claro (sem animacao, ja sai pronto)
+  window.print(); // chamado sincrono, logo apos o clique, pra nao perder o gesto do usuario
 }
 window.addEventListener('afterprint', () => {
   document.documentElement.classList.remove('print-light');
