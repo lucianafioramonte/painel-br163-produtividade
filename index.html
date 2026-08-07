@@ -150,7 +150,9 @@
     color-scheme: dark;
   }
   #stripDate::-webkit-calendar-picker-indicator{ filter:invert(1); cursor:pointer; }
-  .tile-row{display:flex; gap:8px; flex-wrap:wrap;}
+  #secApontado{ display:none; }
+  .tile-row{display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto; padding-bottom:4px; -webkit-overflow-scrolling:touch; scrollbar-width:thin;}
+  .tile-btn{ flex:0 0 auto; white-space:nowrap; }
   .tile-btn{
     border:1px solid var(--border); border-radius:8px; padding:8px 14px; font-size:12px; font-weight:600;
     font-family:'Inter',sans-serif; color:var(--text-2); background:var(--card-2); cursor:pointer;
