@@ -697,7 +697,12 @@ function generatePDF(){
   document.documentElement.classList.add('print-light');
   document.getElementById('headerLogo').src = 'assets/logo.png';
   renderAll(); // redesenha os graficos com as cores do modo claro (sem animacao, ja sai pronto)
-  window.print(); // chamado sincrono, logo apos o clique, pra nao perder o gesto do usuario
+  // forca o navegador a pintar a troca de logo/tema antes de abrir a impressao
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.print();
+    });
+  });
 }
 window.addEventListener('afterprint', () => {
   document.documentElement.classList.remove('print-light');
