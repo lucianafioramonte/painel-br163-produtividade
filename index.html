@@ -234,14 +234,6 @@
   </section>
 
   <section>
-    <div class="section-title" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; text-transform:none; letter-spacing:0;">
-      <span style="text-transform:uppercase; letter-spacing:.06em;">Apontado em</span>
-      <input type="date" id="stripDate" onchange="renderTodayStrip()">
-    </div>
-    <div class="today-strip" id="todayStrip"></div>
-  </section>
-
-  <section>
     <div class="section-title">Progresso da meta mensal</div>
     <div class="cards-grid" id="cardsGrid"></div>
   </section>
@@ -259,6 +251,14 @@
     <div class="card" style="padding:1rem 1.1rem;">
       <div class="hist-canvasbox"><canvas id="histChart"></canvas></div>
     </div>
+  </section>
+
+  <section>
+    <div class="section-title" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; text-transform:none; letter-spacing:0;">
+      <span style="text-transform:uppercase; letter-spacing:.06em;">Apontado em</span>
+      <input type="date" id="stripDate" onchange="renderTodayStrip()">
+    </div>
+    <div class="today-strip" id="todayStrip"></div>
   </section>
 
 </main>
