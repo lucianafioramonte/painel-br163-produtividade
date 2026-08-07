@@ -184,17 +184,17 @@
 
   /* ---- modo claro para geracao de PDF ---- */
   :root.print-light{
-    --bg:#FFFFFF; --card:#E4E4DF; --card-2:#D6D6D0; --border:#BFBFB8;
+    --bg:#FFFFFF; --card:#F1F1EE; --card-2:#E7E7E2; --border:#D8D8D2;
     --text:#1A1C20; --text-2:#4A4D53; --text-3:#6E7177;
     --brand-light:#DCE3F2; --ok-bg:#D9EEDD; --warn-bg:#FBE6BF; --crit-bg:#F6D4CE;
   }
   :root.print-light header{ background:#FFFFFF !important; color:#22252A !important; border-bottom:2px solid var(--brand); }
   :root.print-light header h1{ color:#101426; }
   :root.print-light header .sub{ color:#5B5F66; }
-  :root.print-light header .datebox{ background:#F0F0EC; border:1px solid #DCDBD3; }
+  :root.print-light header .datebox{ background:transparent; border:none; }
   :root.print-light header .datebox .d1{ color:#8A8E94; }
   :root.print-light header .datebox .d2{ color:#101426; }
-  :root.print-light .roadline{ opacity:.6; }
+  :root.print-light .roadline{ display:none; }
   :root.print-light #printBtn{ display:none !important; }
   :root.print-light .badge.ok{ color:#1E8E3E; }
   :root.print-light .badge.warn{ color:#B36B00; }
@@ -204,6 +204,7 @@
   @media print{
     #printBtn{ display:none !important; }
     #secSync, #secRitmo, #secHistorico, #secApontado{ display:none !important; }
+    .roadline{ display:none !important; }
     body{ background:#fff; }
     .achart-canvasbox, .hist-canvasbox{ break-inside:avoid; }
     .card{ break-inside:avoid; }
