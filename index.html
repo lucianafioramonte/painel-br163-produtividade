@@ -191,8 +191,14 @@
   :root.print-light header .datebox .d2{ color:#101426; }
   :root.print-light .roadline{ opacity:.6; }
   :root.print-light #printBtn{ display:none !important; }
+  :root.print-light .badge.ok{ color:#1E8E3E; }
+  :root.print-light .badge.warn{ color:#B36B00; }
+  :root.print-light .badge.crit{ color:#C0392B; }
+  :root.print-light #secSync, :root.print-light #secRitmo,
+  :root.print-light #secHistorico, :root.print-light #secApontado{ display:none !important; }
   @media print{
     #printBtn{ display:none !important; }
+    #secSync, #secRitmo, #secHistorico, #secApontado{ display:none !important; }
     body{ background:#fff; }
     .achart-canvasbox, .hist-canvasbox{ break-inside:avoid; }
     .card{ break-inside:avoid; }
@@ -220,7 +226,7 @@
 
 <main>
 
-  <section>
+  <section id="secSync">
     <div class="card" id="syncBanner" style="padding:.9rem 1.1rem; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
       <div>
         <div style="font-size:13px; font-weight:600;" id="syncStatus">Sincronizando com o GitHub…</div>
@@ -233,17 +239,17 @@
     </div>
   </section>
 
-  <section>
+  <section id="secCards">
     <div class="section-title">Progresso da meta mensal</div>
     <div class="cards-grid" id="cardsGrid"></div>
   </section>
 
-  <section>
+  <section id="secRitmo">
     <div class="section-title">Ritmo por atividade</div>
     <div id="activityCharts"></div>
   </section>
 
-  <section>
+  <section id="secHistorico">
     <div class="section-title" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
       <span>Histórico de apontamentos</span>
       <div class="tile-row" id="histCatSelect"></div>
@@ -253,7 +259,7 @@
     </div>
   </section>
 
-  <section>
+  <section id="secApontado">
     <div class="section-title" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; text-transform:none; letter-spacing:0;">
       <span style="text-transform:uppercase; letter-spacing:.06em;">Apontado em</span>
       <input type="date" id="stripDate" onchange="renderTodayStrip()">
