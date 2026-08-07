@@ -702,6 +702,10 @@ window.addEventListener('afterprint', () => {
 
 (async function init(){
   populateForm();
+  // pre-carrega a logo colorida (usada no PDF) pra nao depender do carregamento na hora do print
+  const preloadLogo = new Image();
+  preloadLogo.src = 'assets/logo.png';
+
   try{ await loadAll(); }
   catch(e){ console.error('loadAll falhou de forma inesperada:', e); }
   renderAll();
