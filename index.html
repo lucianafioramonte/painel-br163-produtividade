@@ -101,6 +101,14 @@
   .modal-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:1rem; }
   .modal-title{ font-family:'Oswald',sans-serif; font-size:17px; font-weight:600; }
   .modal-sub{ font-size:12px; color:var(--text-3); margin-top:2px; }
+  .breakdown-total-row{
+    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+    background:var(--brand-light); border:1px solid var(--border); border-radius:8px;
+    padding:.7rem .9rem; margin-bottom:1rem;
+  }
+  .breakdown-total-row .bt-label{ font-size:12px; color:var(--text-2); text-transform:uppercase; letter-spacing:.03em; font-weight:600; }
+  .breakdown-total-row .bt-val{ font-family:'Roboto Mono',monospace; font-size:20px; font-weight:600; }
+  .breakdown-total-row .bt-count{ font-size:12px; color:var(--text-3); }
   .pcard .punit{font-size:12px; color:var(--text-3); margin-left:4px; font-weight:400;}
   .pcard .prow{display:flex; justify-content:space-between; align-items:baseline; margin-top:2px;}
   .pcard .pval{font-family:'Roboto Mono',monospace; font-size:22px; font-weight:500;}
@@ -299,6 +307,7 @@
       </div>
       <button class="ghost" onclick="closeBreakdown()">Fechar ✕</button>
     </div>
+    <div id="breakdownTotalRow" class="breakdown-total-row"></div>
     <div id="breakdownCanvasBox" style="position:relative; width:100%; height:280px;">
       <canvas id="breakdownChart"></canvas>
     </div>
@@ -509,6 +518,13 @@ function openBreakdown(key){
   const labels = people.map(p => p.nome);
   const totals = people.map(p => p.total);
   const colors = people.map(p => (p.meta && p.total >= p.meta) ? '#3DD07A' : c.color);
+
+  const sumTotal = totals.reduce((a,b)=>a+b, 0);
+  const metaSum = people.reduce((a,p)=>a+(p.meta||0), 0);
+  document.getElementById('breakdownTotalRow').innerHTML =
+    `<span class="bt-label">Total do grupo</span>
+     <span class="bt-val">${fmt(sumTotal)} ${c.unit}</span>
+     <span class="bt-count">${people.length} pessoa(s)${metaSum ? ' · soma das metas individuais '+fmt(metaSum)+' '+c.unit : ''}</span>`;
 
   const box = document.getElementById('breakdownCanvasBox');
   box.style.height = Math.max(280, people.length*24) + 'px';
