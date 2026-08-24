@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24T11:59:32.758471Z",
+  "updated_at": "2026-08-24T12:24:07.019397Z",
   "month": {
     "year": 2026,
     "month": 8
@@ -92,6 +92,22 @@
       "unit": "m",
       "goal": 98,
       "color": "#4FB3E8"
+    },
+    {
+      "key": "basculante_media",
+      "name": "Basculante — Média por Motorista",
+      "resp": "54 motoristas ativos · meta individual 650 viagens",
+      "unit": "viagens",
+      "goal": 650,
+      "color": "#E0A526"
+    },
+    {
+      "key": "escavadeira_media",
+      "name": "Escavadeira — Média por Operador",
+      "resp": "10 operadores ativos · meta individual 60.000 ton",
+      "unit": "ton",
+      "goal": 60000,
+      "color": "#5B8FD6"
     }
   ],
   "entries": {
@@ -178,6 +194,12 @@
     "disp_alas": {},
     "disp_dissipadores": {},
     "disp_enrocamento": {},
-    "galeria_simplicio": {}
+    "galeria_simplicio": {},
+    "basculante_media": {
+      "2026-08-15": 154.67
+    },
+    "escavadeira_media": {
+      "2026-08-15": 28283.6
+    }
   }
 }
