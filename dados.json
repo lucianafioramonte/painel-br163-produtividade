@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24T17:20:43.200236Z",
+  "updated_at": "2026-08-24T17:28:28.991571Z",
   "month": {
     "year": 2026,
     "month": 8
@@ -99,7 +99,364 @@
       "resp": "54 motoristas ativos · meta individual 650 viagens",
       "unit": "viagens",
       "goal": 650,
-      "color": "#E0A526"
+      "color": "#E0A526",
+      "breakdown": [
+        {
+          "nome": "Jose J.",
+          "total": 271,
+          "meta": 650
+        },
+        {
+          "nome": "Leonildo",
+          "total": 6,
+          "meta": 650
+        },
+        {
+          "nome": "Cristianei",
+          "total": 19,
+          "meta": 650
+        },
+        {
+          "nome": "Claudenir",
+          "total": 32,
+          "meta": 650
+        },
+        {
+          "nome": "Getulio",
+          "total": 25,
+          "meta": 650
+        },
+        {
+          "nome": "Elisvaldo",
+          "total": 22,
+          "meta": 650
+        },
+        {
+          "nome": "Renildo",
+          "total": 109,
+          "meta": 650
+        },
+        {
+          "nome": "Walgnei",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Anderson",
+          "total": 25,
+          "meta": 650
+        },
+        {
+          "nome": "Jeova J. (1)",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Adriano R.",
+          "total": 18,
+          "meta": 650
+        },
+        {
+          "nome": "Rafael K.",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Altevir",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Osvaldo",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Edinaldo",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Evando",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Josenildo",
+          "total": 127,
+          "meta": 650
+        },
+        {
+          "nome": "Adriano S.",
+          "total": 311,
+          "meta": 650
+        },
+        {
+          "nome": "Robson",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Zizo",
+          "total": 193,
+          "meta": 650
+        },
+        {
+          "nome": "Leandro",
+          "total": 326,
+          "meta": 650
+        },
+        {
+          "nome": "Jonatas",
+          "total": 329,
+          "meta": 650
+        },
+        {
+          "nome": "Antonio M. (1)",
+          "total": 300,
+          "meta": 650
+        },
+        {
+          "nome": "Jose G.",
+          "total": 290,
+          "meta": 650
+        },
+        {
+          "nome": "Fernando",
+          "total": 112,
+          "meta": 650
+        },
+        {
+          "nome": "Jesiel",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Ronaldo",
+          "total": 148,
+          "meta": 650
+        },
+        {
+          "nome": "Janilson",
+          "total": 192,
+          "meta": 650
+        },
+        {
+          "nome": "Edivan S.",
+          "total": 241,
+          "meta": 650
+        },
+        {
+          "nome": "Wilson",
+          "total": 280,
+          "meta": 650
+        },
+        {
+          "nome": "Antonio G.",
+          "total": 202,
+          "meta": 650
+        },
+        {
+          "nome": "Marcelo",
+          "total": 21,
+          "meta": 650
+        },
+        {
+          "nome": "Jose A.",
+          "total": 95,
+          "meta": 650
+        },
+        {
+          "nome": "Antonio M. (2)",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Joscinaldo",
+          "total": 294,
+          "meta": 650
+        },
+        {
+          "nome": "Jeova D.",
+          "total": 14,
+          "meta": 650
+        },
+        {
+          "nome": "Darlan",
+          "total": 249,
+          "meta": 650
+        },
+        {
+          "nome": "Dyhego",
+          "total": 325,
+          "meta": 650
+        },
+        {
+          "nome": "Carlos",
+          "total": 155,
+          "meta": 650
+        },
+        {
+          "nome": "Edivan D.",
+          "total": 243,
+          "meta": 650
+        },
+        {
+          "nome": "Edvaldo",
+          "total": 324,
+          "meta": 650
+        },
+        {
+          "nome": "Paulo",
+          "total": 155,
+          "meta": 650
+        },
+        {
+          "nome": "Jeremias",
+          "total": 299,
+          "meta": 650
+        },
+        {
+          "nome": "Valdir",
+          "total": 179,
+          "meta": 650
+        },
+        {
+          "nome": "Lucas",
+          "total": 189,
+          "meta": 650
+        },
+        {
+          "nome": "Jorge",
+          "total": 212,
+          "meta": 650
+        },
+        {
+          "nome": "Reginaldo",
+          "total": 311,
+          "meta": 650
+        },
+        {
+          "nome": "Antonio A.",
+          "total": 337,
+          "meta": 650
+        },
+        {
+          "nome": "Evandro",
+          "total": 316,
+          "meta": 650
+        },
+        {
+          "nome": "Sebastiao",
+          "total": 80,
+          "meta": 650
+        },
+        {
+          "nome": "Valter",
+          "total": 24,
+          "meta": 650
+        },
+        {
+          "nome": "Mierlyson",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Manoel",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Rafael P.",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Marco",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Thyago",
+          "total": 23,
+          "meta": 650
+        },
+        {
+          "nome": "Robert",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Denis",
+          "total": 15,
+          "meta": 650
+        },
+        {
+          "nome": "Cristiano",
+          "total": 142,
+          "meta": 650
+        },
+        {
+          "nome": "Lourenco",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Joselito",
+          "total": 143,
+          "meta": 650
+        },
+        {
+          "nome": "Diego S.",
+          "total": 32,
+          "meta": 650
+        },
+        {
+          "nome": "Diego L.",
+          "total": 22,
+          "meta": 650
+        },
+        {
+          "nome": "Laercio",
+          "total": 0,
+          "meta": 650
+        },
+        {
+          "nome": "Danilo",
+          "total": 160,
+          "meta": 650
+        },
+        {
+          "nome": "Antonio L.",
+          "total": 55,
+          "meta": 650
+        },
+        {
+          "nome": "Marcos",
+          "total": 112,
+          "meta": 650
+        },
+        {
+          "nome": "Raimundo",
+          "total": 110,
+          "meta": 650
+        },
+        {
+          "nome": "João",
+          "total": 106,
+          "meta": 650
+        },
+        {
+          "nome": "Averaldo",
+          "total": 31,
+          "meta": 650
+        },
+        {
+          "nome": "Jeova J. (2)",
+          "total": 1,
+          "meta": 650
+        }
+      ]
     },
     {
       "key": "escavadeira_media",
@@ -107,7 +464,79 @@
       "resp": "10 operadores ativos · meta individual 60.000 ton",
       "unit": "ton",
       "goal": 60000,
-      "color": "#5B8FD6"
+      "color": "#5B8FD6",
+      "breakdown": [
+        {
+          "nome": "Danilo",
+          "total": 0,
+          "meta": 60000
+        },
+        {
+          "nome": "Joao",
+          "total": 40733,
+          "meta": 60000
+        },
+        {
+          "nome": "Joilson",
+          "total": 0,
+          "meta": 60000
+        },
+        {
+          "nome": "Jucemar",
+          "total": 66978,
+          "meta": 60000
+        },
+        {
+          "nome": "Maurilio",
+          "total": 28266,
+          "meta": 60000
+        },
+        {
+          "nome": "Thiago",
+          "total": 5382,
+          "meta": 60000
+        },
+        {
+          "nome": "Willian",
+          "total": 22118,
+          "meta": 60000
+        },
+        {
+          "nome": "Alessandro",
+          "total": 23361,
+          "meta": 60000
+        },
+        {
+          "nome": "Edivaldo",
+          "total": 32749,
+          "meta": 60000
+        },
+        {
+          "nome": "Manoel",
+          "total": 29849,
+          "meta": 60000
+        },
+        {
+          "nome": "Daniel",
+          "total": 0,
+          "meta": 60000
+        },
+        {
+          "nome": "Fabio",
+          "total": 6975,
+          "meta": 60000
+        },
+        {
+          "nome": "Marcos",
+          "total": 26425,
+          "meta": 60000
+        },
+        {
+          "nome": "Vandeci",
+          "total": 0,
+          "meta": 60000
+        }
+      ]
     }
   ],
   "entries": {
