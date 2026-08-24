@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24T15:25:36.227267Z",
+  "updated_at": "2026-08-24T17:19:51.384146Z",
   "month": {
     "year": 2026,
     "month": 8
@@ -10,7 +10,7 @@
       "name": "CBUQ",
       "resp": "Valmir",
       "unit": "ton",
-      "goal": 40000,
+      "goal": 30000,
       "color": "#2a78d6"
     },
     {
