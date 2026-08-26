@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T11:30:02.470890Z",
+  "updated_at": "2026-08-26T11:32:53.112319Z",
   "month": {
     "year": 2026,
     "month": 8
@@ -96,14 +96,14 @@
     {
       "key": "basculante_media",
       "name": "Basculante — Média por Motorista",
-      "resp": "54 motoristas ativos · meta individual 650 viagens",
+      "resp": "58 motoristas ativos · meta individual 650 viagens",
       "unit": "viagens",
       "goal": 650,
       "color": "#E0A526",
       "breakdown": [
         {
           "nome": "Jose J.",
-          "total": 271,
+          "total": 346,
           "meta": 650
         },
         {
@@ -133,7 +133,7 @@
         },
         {
           "nome": "Renildo",
-          "total": 109,
+          "total": 145,
           "meta": 650
         },
         {
@@ -147,8 +147,8 @@
           "meta": 650
         },
         {
-          "nome": "Jeova J. (1)",
-          "total": 0,
+          "nome": "Jeova J.",
+          "total": 14,
           "meta": 650
         },
         {
@@ -188,7 +188,7 @@
         },
         {
           "nome": "Adriano S.",
-          "total": 311,
+          "total": 336,
           "meta": 650
         },
         {
@@ -198,27 +198,27 @@
         },
         {
           "nome": "Zizo",
-          "total": 193,
+          "total": 243,
           "meta": 650
         },
         {
           "nome": "Leandro",
-          "total": 326,
+          "total": 401,
           "meta": 650
         },
         {
           "nome": "Jonatas",
-          "total": 329,
+          "total": 376,
           "meta": 650
         },
         {
-          "nome": "Antonio M. (1)",
-          "total": 300,
+          "nome": "Antonio M.(1)",
+          "total": 325,
           "meta": 650
         },
         {
           "nome": "Jose G.",
-          "total": 290,
+          "total": 365,
           "meta": 650
         },
         {
@@ -233,27 +233,27 @@
         },
         {
           "nome": "Ronaldo",
-          "total": 148,
+          "total": 155,
           "meta": 650
         },
         {
           "nome": "Janilson",
-          "total": 192,
+          "total": 233,
           "meta": 650
         },
         {
           "nome": "Edivan S.",
-          "total": 241,
+          "total": 278,
           "meta": 650
         },
         {
           "nome": "Wilson",
-          "total": 280,
+          "total": 355,
           "meta": 650
         },
         {
           "nome": "Antonio G.",
-          "total": 202,
+          "total": 302,
           "meta": 650
         },
         {
@@ -263,17 +263,17 @@
         },
         {
           "nome": "Jose A.",
-          "total": 95,
+          "total": 108,
           "meta": 650
         },
         {
-          "nome": "Antonio M. (2)",
+          "nome": "Antonio M.(2)",
           "total": 0,
           "meta": 650
         },
         {
           "nome": "Joscinaldo",
-          "total": 294,
+          "total": 353,
           "meta": 650
         },
         {
@@ -283,12 +283,12 @@
         },
         {
           "nome": "Darlan",
-          "total": 249,
+          "total": 286,
           "meta": 650
         },
         {
           "nome": "Dyhego",
-          "total": 325,
+          "total": 371,
           "meta": 650
         },
         {
@@ -298,27 +298,27 @@
         },
         {
           "nome": "Edivan D.",
-          "total": 243,
+          "total": 309,
           "meta": 650
         },
         {
           "nome": "Edvaldo",
-          "total": 324,
+          "total": 394,
           "meta": 650
         },
         {
           "nome": "Paulo",
-          "total": 155,
+          "total": 216,
           "meta": 650
         },
         {
           "nome": "Jeremias",
-          "total": 299,
+          "total": 365,
           "meta": 650
         },
         {
           "nome": "Valdir",
-          "total": 179,
+          "total": 190,
           "meta": 650
         },
         {
@@ -328,22 +328,22 @@
         },
         {
           "nome": "Jorge",
-          "total": 212,
+          "total": 284,
           "meta": 650
         },
         {
           "nome": "Reginaldo",
-          "total": 311,
+          "total": 409,
           "meta": 650
         },
         {
           "nome": "Antonio A.",
-          "total": 337,
+          "total": 392,
           "meta": 650
         },
         {
           "nome": "Evandro",
-          "total": 316,
+          "total": 391,
           "meta": 650
         },
         {
@@ -393,7 +393,7 @@
         },
         {
           "nome": "Cristiano",
-          "total": 142,
+          "total": 198,
           "meta": 650
         },
         {
@@ -408,7 +408,7 @@
         },
         {
           "nome": "Diego S.",
-          "total": 32,
+          "total": 132,
           "meta": 650
         },
         {
@@ -423,7 +423,7 @@
         },
         {
           "nome": "Danilo",
-          "total": 160,
+          "total": 217,
           "meta": 650
         },
         {
@@ -433,28 +433,43 @@
         },
         {
           "nome": "Marcos",
-          "total": 112,
+          "total": 136,
           "meta": 650
         },
         {
           "nome": "Raimundo",
-          "total": 110,
+          "total": 136,
           "meta": 650
         },
         {
           "nome": "João",
-          "total": 106,
+          "total": 156,
           "meta": 650
         },
         {
           "nome": "Averaldo",
-          "total": 31,
+          "total": 56,
           "meta": 650
         },
         {
-          "nome": "Jeova J. (2)",
-          "total": 1,
+          "nome": "Lazaro",
+          "total": 42,
           "meta": 650
+        },
+        {
+          "nome": "Antonio J.",
+          "total": 43,
+          "meta": 650
+        },
+        {
+          "nome": "Joel",
+          "total": 12,
+          "meta": 650
+        },
+        {
+          "nome": "Gilberto",
+          "total": 25,
+          "meta": 651
         }
       ]
     },
@@ -473,7 +488,7 @@
         },
         {
           "nome": "Joao",
-          "total": 40733,
+          "total": 46595,
           "meta": 60000
         },
         {
@@ -483,12 +498,12 @@
         },
         {
           "nome": "Jucemar",
-          "total": 66978,
+          "total": 70650,
           "meta": 60000
         },
         {
           "nome": "Maurilio",
-          "total": 28266,
+          "total": 34093,
           "meta": 60000
         },
         {
@@ -498,22 +513,22 @@
         },
         {
           "nome": "Willian",
-          "total": 22118,
+          "total": 28648,
           "meta": 60000
         },
         {
           "nome": "Alessandro",
-          "total": 23361,
+          "total": 27119,
           "meta": 60000
         },
         {
           "nome": "Edivaldo",
-          "total": 32749,
+          "total": 36353,
           "meta": 60000
         },
         {
           "nome": "Manoel",
-          "total": 29849,
+          "total": 33597,
           "meta": 60000
         },
         {
@@ -523,12 +538,12 @@
         },
         {
           "nome": "Fabio",
-          "total": 6975,
+          "total": 8625,
           "meta": 60000
         },
         {
           "nome": "Marcos",
-          "total": 26425,
+          "total": 32935,
           "meta": 60000
         },
         {
@@ -656,10 +671,10 @@
     "disp_enrocamento": {},
     "galeria_simplicio": {},
     "basculante_media": {
-      "2026-08-15": 154.67
+      "2026-08-15": 176.24
     },
     "escavadeira_media": {
-      "2026-08-15": 28283.6
+      "2026-08-15": 32399.7
     }
   }
 }
